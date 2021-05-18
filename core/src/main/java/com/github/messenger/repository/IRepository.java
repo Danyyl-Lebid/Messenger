@@ -8,6 +8,8 @@ public interface IRepository<T> {
 
     Collection<T> findAll();
 
+    T findById(Long id);
+
     T findBy(String field, Object value);
 
     Collection<T> findAllBy(String field, Object value);

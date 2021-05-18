@@ -1,5 +1,7 @@
 package com.github.messenger.entity;
 
+import org.hibernate.annotations.NaturalId;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,10 +15,10 @@ public class User {
     private Long id;
 
     @Column(name = "firstname")
-    private String firstName;
+    private String firstname;
 
     @Column(name = "lastname")
-    private String lastName;
+    private String lastname;
 
     @Column(name = "login", unique = true)
     private String login;
@@ -34,15 +36,15 @@ public class User {
     private String phone;
 
     @Column(name = "role")
-    private Role role;
+    private String role;
 
     public User() {
     }
 
     public User(
             Long id,
-            String firstName,
-            String lastName,
+            String firstname,
+            String lastname,
             String login,
             String password,
             String email,
@@ -51,35 +53,14 @@ public class User {
             Role role
     ) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.login = login;
         this.password = password;
         this.email = email;
         this.nickname = nickname;
         this.phone = phone;
-        this.role = role;
-    }
-
-    public User(
-            Long id,
-            String firstName,
-            String lastName,
-            String login,
-            String password,
-            String email,
-            String nickname,
-            String phone
-    ) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.nickname = nickname;
-        this.phone = phone;
-        this.role = Role.USER;
+        this.role = role.toString();
     }
 
     public Long getId() {
@@ -91,19 +72,19 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getLogin() {
@@ -147,11 +128,11 @@ public class User {
     }
 
     public Role getRole() {
-        return role;
+        return Role.valueOf(role);
     }
 
     public void setRole(Role role) {
-        this.role = role;
+        this.role = role.toString();
     }
 
     @Override
@@ -160,20 +141,20 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(firstname, user.firstname) &&
+                Objects.equals(lastname, user.lastname) &&
                 Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(nickname, user.nickname) &&
                 Objects.equals(phone, user.phone) &&
-                role == user.role;
+                Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                id, firstName, lastName, login,
+                id, firstname, lastname, login,
                 password, email, nickname, phone, role);
     }
 
@@ -181,8 +162,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstname + '\'' +
+                ", lastName='" + lastname + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +

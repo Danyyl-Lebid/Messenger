@@ -1,13 +1,14 @@
 package com.github.messenger.repository;
 
 import com.github.messenger.utils.HibernateSessionManager;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import java.util.Collection;
 
 public class HibernateRepository<T> implements IRepository<T> {
@@ -21,7 +22,6 @@ public class HibernateRepository<T> implements IRepository<T> {
         this.sessionManager = sessionManager;
     }
 
-
     @Override
     public Collection<T> findAll() {
         try (Session session = sessionManager.getSession()) {
@@ -33,20 +33,23 @@ public class HibernateRepository<T> implements IRepository<T> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public T findBy(String field, Object value) {
-        try (Session session = sessionManager.getSession()) {
-            Criteria criteria = session.createCriteria(type);
-            return (T) criteria.add(Restrictions.eq(field, value)).uniqueResult();
+    public T findById(Long id) {
+        try (Session session = sessionManager.getSession()){
+            return session.get(type, id);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    public T findBy(String field, Object value) {
+        try (Session session = sessionManager.getSession()) {
+            return parametrizedQuery(session, field, value.toString()).getSingleResult();
+        }
+    }
+
+    @Override
     public Collection<T> findAllBy(String field, Object value) {
         try (Session session = sessionManager.getSession()) {
-            Criteria criteria = session.createCriteria(type);
-            return (Collection<T>) criteria.add(Restrictions.eq(field, value)).list();
+            return parametrizedQuery(session, field, value.toString()).getResultList();
         }
     }
 
@@ -75,6 +78,20 @@ public class HibernateRepository<T> implements IRepository<T> {
             session.delete(entity);
             tx1.commit();
         }
+    }
+
+    private TypedQuery<T> parametrizedQuery(Session session, String field, String value){
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
+        Root<T> root = criteriaQuery.from(type);
+        criteriaQuery.select(root);
+
+        ParameterExpression<String> params = criteriaBuilder.parameter(String.class);
+        criteriaQuery.where(criteriaBuilder.equal(root.get(field), params));
+
+        TypedQuery<T> query = session.createQuery(criteriaQuery);
+        query.setParameter(params, value);
+        return query;
     }
 
 }

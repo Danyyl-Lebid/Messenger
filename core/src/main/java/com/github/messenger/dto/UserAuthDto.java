@@ -1,5 +1,6 @@
 package com.github.messenger.dto;
 
+import com.github.messenger.entity.Role;
 import com.github.messenger.entity.User;
 
 import java.util.Objects;
@@ -64,7 +65,8 @@ public class UserAuthDto {
                 this.password,
                 null,
                 null,
-                null
+                null,
+                Role.USER
         );
     }
 
