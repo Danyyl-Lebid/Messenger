@@ -1,4 +1,4 @@
 package com.github.messenger.payload;
 
-public class Token {
+public class PublicToken {
 }

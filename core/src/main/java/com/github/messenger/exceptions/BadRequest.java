@@ -1,4 +1,12 @@
 package com.github.messenger.exceptions;
 
-public class BadRequest {
+public class BadRequest extends RuntimeException {
+
+    public BadRequest() {
+    }
+
+    public BadRequest(String message) {
+        super(message);
+    }
+
 }
