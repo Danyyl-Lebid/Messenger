@@ -56,18 +56,4 @@ public class UserAuthDto {
                 '}';
     }
 
-    public User toUser(){
-        return new User(
-                null,
-                null,
-                null,
-                this.login,
-                this.password,
-                null,
-                null,
-                null,
-                Role.USER
-        );
-    }
-
 }

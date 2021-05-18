@@ -18,9 +18,9 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Date;
 
-public class TokenProvider {
+public class PrivateTokenProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(TokenProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(PrivateTokenProvider.class);
 
     private static final String SECRET_KEY = "SpacersChoice";
 

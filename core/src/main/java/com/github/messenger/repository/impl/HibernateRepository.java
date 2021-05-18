@@ -1,5 +1,6 @@
-package com.github.messenger.repository;
+package com.github.messenger.repository.impl;
 
+import com.github.messenger.repository.IRepository;
 import com.github.messenger.utils.HibernateSessionManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

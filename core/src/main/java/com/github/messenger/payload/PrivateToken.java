@@ -1,15 +1,14 @@
 package com.github.messenger.payload;
 
 import com.github.messenger.entity.Role;
+import com.github.messenger.utils.DateUtils;
 
 import java.util.Date;
 import java.util.Objects;
 
 public class PrivateToken {
 
-    private String login;
-
-    private Role role;
+    private String email;
 
     private Date createdAt;
 
@@ -18,32 +17,24 @@ public class PrivateToken {
     public PrivateToken() {
     }
 
-    public PrivateToken(String login, Role role, Date createdAt, Date expireIn) {
-        this.login = login;
-        this.role = role;
+    public PrivateToken(String email, Date createdAt, Date expireIn) {
+        this.email = email;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(String login, Role role) {
-        this.login = login;
-        this.role = role;
+    public PrivateToken(String email, int lifetimeInMinutes) {
+        this.email = email;
+        this.createdAt = DateUtils.getCurrentDate();
+        this.expireIn = DateUtils.addMinutes(this.createdAt, lifetimeInMinutes);
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getCreatedAt() {
@@ -67,21 +58,21 @@ public class PrivateToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivateToken that = (PrivateToken) o;
-        return Objects.equals(login, that.login) && role == that.role && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
+        return Objects.equals(email, that.email) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, role, createdAt, expireIn);
+        return Objects.hash(email, createdAt, expireIn);
     }
 
     @Override
     public String toString() {
         return "PrivateToken{" +
-                "login='" + login + '\'' +
-                ", role=" + role +
+                "email='" + email + '\'' +
                 ", createdAt=" + createdAt +
                 ", expireIn=" + expireIn +
                 '}';
     }
+
 }
