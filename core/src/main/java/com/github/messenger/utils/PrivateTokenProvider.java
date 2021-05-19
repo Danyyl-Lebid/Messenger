@@ -73,13 +73,12 @@ public class PrivateTokenProvider {
         return new SecretKeySpec(tmp.getEncoded(), "AES");
     }
 
-    public static boolean checkTokenLifetime(String str) {
-        PrivateToken privateToken = decode(str);
-        if (privateToken == null) {
+    public static boolean validateToken(PrivateToken token) {
+        if (token == null) {
             log.info("Token is null!");
             return false;
         }
-        if (privateToken.getExpireIn().compareTo(new Date()) < 0) {
+        if (token.getExpireIn().compareTo(new Date()) < 0) {
             log.info("Token expired!");
             return false;
         }

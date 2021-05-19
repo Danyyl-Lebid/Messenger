@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class PrivateToken {
 
-    private String email;
+    private String login;
 
     private Date createdAt;
 
@@ -17,24 +17,24 @@ public class PrivateToken {
     public PrivateToken() {
     }
 
-    public PrivateToken(String email, Date createdAt, Date expireIn) {
-        this.email = email;
+    public PrivateToken(String login, Date createdAt, Date expireIn) {
+        this.login = login;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(String email, int lifetimeInMinutes) {
-        this.email = email;
+    public PrivateToken(String login, int lifetimeInMinutes) {
+        this.login = login;
         this.createdAt = DateUtils.getCurrentDate();
         this.expireIn = DateUtils.addMinutes(this.createdAt, lifetimeInMinutes);
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public Date getCreatedAt() {
@@ -58,18 +58,18 @@ public class PrivateToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivateToken that = (PrivateToken) o;
-        return Objects.equals(email, that.email) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
+        return Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, createdAt, expireIn);
+        return Objects.hash(login, createdAt, expireIn);
     }
 
     @Override
     public String toString() {
         return "PrivateToken{" +
-                "email='" + email + '\'' +
+                "login='" + login + '\'' +
                 ", createdAt=" + createdAt +
                 ", expireIn=" + expireIn +
                 '}';

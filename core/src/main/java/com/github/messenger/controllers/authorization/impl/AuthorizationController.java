@@ -26,7 +26,7 @@ public class AuthorizationController implements IAuthorizationController {
         UserAuthDto dto = JsonHelper.fromJson(json, UserAuthDto.class)
                 .orElseThrow(BadRequest::new);
         User user = findUser(dto);
-        PrivateToken privateToken = new PrivateToken(user.getEmail(), 30);
+        PrivateToken privateToken = new PrivateToken(user.getLogin(), 30);
         PublicToken publicToken = new PublicToken(user.getRole(), user.getNickname());
         return PublicTokenProvider.encode(publicToken) + "." + PrivateTokenProvider.encode(privateToken);
     }

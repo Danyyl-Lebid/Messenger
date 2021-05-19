@@ -1,5 +1,5 @@
 package com.github.messenger.payload;
 
 public enum Topic {
-    LOGIN, LOGOUT, DISCONNECT
+    LOGIN, LOGOUT, MESSAGE
 }
