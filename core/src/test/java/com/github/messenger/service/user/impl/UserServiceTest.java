@@ -9,21 +9,15 @@ import com.github.messenger.repository.IRepository;
 import com.github.messenger.repository.impl.HibernateRepository;
 import com.github.messenger.service.user.IUserService;
 import com.github.messenger.utils.HibernateSessionManager;
-import org.hibernate.TransientObjectException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.NoResultException;
-import javax.persistence.OptimisticLockException;
-import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-
-import static org.junit.Assert.*;
 
 public class UserServiceTest {
 

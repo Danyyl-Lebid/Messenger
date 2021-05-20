@@ -1,7 +1,11 @@
 package com.github.messenger.service.chat;
 
+import com.github.messenger.entity.UserChatRelation;
+
 public interface IUserChatRelationService {
 
-    void addUser(Long chatId, Long userId);
+    void addRelation(UserChatRelation relation);
+
+    void removeRelation(UserChatRelation relation);
 
 }

@@ -287,9 +287,6 @@ public class HibernateRepositoryTest {
                 Status.OFFLINE,
                 0L
         ));
-        Collection<User> exp = new ArrayList<>(Arrays.asList(mockUserArray));
-        Collection<User> act = repository.findAll();
-        Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
 
