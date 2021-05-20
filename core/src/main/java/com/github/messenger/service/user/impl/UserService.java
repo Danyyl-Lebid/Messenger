@@ -1,9 +1,14 @@
 package com.github.messenger.service.user.impl;
 
 import com.github.messenger.entity.User;
+import com.github.messenger.exceptions.Conflict;
+import com.github.messenger.exceptions.UpdateError;
 import com.github.messenger.repository.IRepository;
 import com.github.messenger.service.user.IUserService;
+import org.hibernate.TransientObjectException;
+import org.hibernate.exception.ConstraintViolationException;
 
+import javax.persistence.PersistenceException;
 import java.util.Collection;
 
 public class UserService implements IUserService {
@@ -21,7 +26,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findById(Long id) {
-        return this.userRepository.findBy("id", id);
+        return this.userRepository.findById(id);
     }
 
     @Override
@@ -41,13 +46,21 @@ public class UserService implements IUserService {
 
     @Override
     public User insert(User user) {
-        this.userRepository.save(user);
+        try {
+            this.userRepository.save(user);
+        } catch (ConstraintViolationException e){
+            throw new Conflict();
+        }
         return user;
     }
 
     @Override
     public void update(User user) {
-        this.userRepository.update(user);
+        try {
+            this.userRepository.update(user);
+        } catch (PersistenceException e){
+            throw new UpdateError();
+        }
     }
 
 }
