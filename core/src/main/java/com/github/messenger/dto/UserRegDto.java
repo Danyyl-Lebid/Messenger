@@ -1,6 +1,6 @@
 package com.github.messenger.dto;
 
-import com.github.messenger.entity.Role;
+import com.github.messenger.payload.Role;
 import com.github.messenger.entity.User;
 
 import java.util.Objects;

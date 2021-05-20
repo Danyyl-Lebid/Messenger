@@ -1,6 +1,5 @@
 package com.github.messenger.payload;
 
-import com.github.messenger.entity.Role;
 import com.github.messenger.utils.DateUtils;
 
 import java.util.Date;

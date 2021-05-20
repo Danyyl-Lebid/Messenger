@@ -1,4 +1,4 @@
-package com.github.messenger.entity;
+package com.github.messenger.payload;
 
 public enum Role {
 

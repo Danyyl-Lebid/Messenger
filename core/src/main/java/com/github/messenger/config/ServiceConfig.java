@@ -1,7 +1,7 @@
 package com.github.messenger.config;
 
 import com.github.messenger.service.user.IUserService;
-import com.github.messenger.service.user.UserService;
+import com.github.messenger.service.user.impl.UserService;
 
 
 public class ServiceConfig {

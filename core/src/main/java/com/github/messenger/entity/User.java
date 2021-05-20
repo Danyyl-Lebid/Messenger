@@ -1,6 +1,6 @@
 package com.github.messenger.entity;
 
-import org.hibernate.annotations.NaturalId;
+import com.github.messenger.payload.Role;
 
 import javax.persistence.*;
 import java.util.Objects;

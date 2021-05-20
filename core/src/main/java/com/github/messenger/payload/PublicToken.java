@@ -1,7 +1,5 @@
 package com.github.messenger.payload;
 
-import com.github.messenger.entity.Role;
-
 import java.util.Objects;
 
 public class PublicToken {

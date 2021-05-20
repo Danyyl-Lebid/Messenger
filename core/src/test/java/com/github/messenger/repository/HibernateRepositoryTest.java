@@ -1,6 +1,6 @@
 package com.github.messenger.repository;
 
-import com.github.messenger.entity.Role;
+import com.github.messenger.payload.Role;
 import com.github.messenger.entity.User;
 import com.github.messenger.repository.impl.HibernateRepository;
 import com.github.messenger.utils.HibernateSessionManager;

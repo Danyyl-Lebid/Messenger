@@ -1,0 +1,114 @@
+package com.github.messenger.entity;
+
+import javax.persistence.*;
+import java.util.Objects;
+
+@Entity
+@Table(name = "messages", schema = "public")
+public class Message {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "user_chat_id")
+    private Long userChatId;
+
+    @Column(name = "chat_id")
+    private Long chatId;
+
+    @Column(name = "topic")
+    private String topic;
+
+    @Column(name = "text")
+    private String text;
+
+    @Column(name = "time")
+    private Long time;
+
+    public Message() {
+    }
+
+    public Message(Long id, Long userChatId, Long chatId, String topic, String text, Long time) {
+        this.id = id;
+        this.userChatId = userChatId;
+        this.chatId = chatId;
+        this.topic = topic;
+        this.text = text;
+        this.time = time;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserChatId() {
+        return userChatId;
+    }
+
+    public void setUserChatId(Long userChatId) {
+        this.userChatId = userChatId;
+    }
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return Objects.equals(id, message.id) && Objects.equals(userChatId, message.userChatId) && Objects.equals(chatId, message.chatId) && Objects.equals(topic, message.topic) && Objects.equals(text, message.text) && Objects.equals(time, message.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userChatId, chatId, topic, text, time);
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", userChatId=" + userChatId +
+                ", chatId=" + chatId +
+                ", topic='" + topic + '\'' +
+                ", text='" + text + '\'' +
+                ", time=" + time +
+                '}';
+    }
+}

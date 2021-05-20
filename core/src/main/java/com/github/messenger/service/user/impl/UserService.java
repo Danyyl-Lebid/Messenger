@@ -1,7 +1,8 @@
-package com.github.messenger.service.user;
+package com.github.messenger.service.user.impl;
 
 import com.github.messenger.entity.User;
 import com.github.messenger.repository.IRepository;
+import com.github.messenger.service.user.IUserService;
 
 import java.util.Collection;
 
@@ -41,7 +42,7 @@ public class UserService implements IUserService {
     @Override
     public User insert(User user) {
         this.userRepository.save(user);
-        return this.userRepository.findById(user.getId());
+        return user;
     }
 
     @Override
