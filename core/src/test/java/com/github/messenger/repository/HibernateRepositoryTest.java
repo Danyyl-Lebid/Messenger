@@ -179,9 +179,8 @@ public class HibernateRepositoryTest {
     @Test
     public void save() {
         repository.save(mockUser);
-        User exp = mockUser;
         User act = repository.findById(mockUser.getId());
-        Assert.assertEquals(exp, act);
+        Assert.assertEquals(mockUser, act);
     }
 
     @Test(expected = ConstraintViolationException.class)
@@ -198,10 +197,9 @@ public class HibernateRepositoryTest {
     public void update() {
         repository.save(mockUser);
         mockUser.setRole(Role.ADMIN);
-        User exp = mockUser;
         repository.update(mockUser);
         User act = repository.findById(mockUser.getId());
-        Assert.assertEquals(exp, act);
+        Assert.assertEquals(mockUser, act);
     }
 
     @Test (expected = TransientObjectException.class)
