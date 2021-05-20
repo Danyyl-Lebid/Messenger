@@ -5,7 +5,9 @@ import com.github.messenger.repository.IRepository;
 import com.github.messenger.service.chat.IUserChatRelationService;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UserChatRelationService implements IUserChatRelationService {
 
@@ -29,5 +31,17 @@ public class UserChatRelationService implements IUserChatRelationService {
                 break;
             }
         }
+    }
+
+    @Override
+    public List<Long> findAllUsersByChatId(Long chatId) {
+        Collection<UserChatRelation> usersInChat = userChatRelationRepository.findAllBy("chat_id", chatId);
+        return usersInChat.stream().map(UserChatRelation::getUserId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> findAllChatsByUserId(Long userId) {
+        Collection<UserChatRelation> chatOfUser = userChatRelationRepository.findAllBy("user_id", userId);
+        return chatOfUser.stream().map(UserChatRelation::getUserId).collect(Collectors.toList());
     }
 }
