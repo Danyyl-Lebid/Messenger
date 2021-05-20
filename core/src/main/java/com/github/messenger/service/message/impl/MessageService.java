@@ -26,7 +26,7 @@ public class MessageService implements IMessageService {
     public Message save(Message message) {
         messageRepository.save(message);
         UserChatRelation userChatRelation = userChatRepository.findById(message.getUserChatId());
-        LastMessage lastMessage = lastMessageRepository.findBy("chat_id", userChatRelation.getChatId());
+        LastMessage lastMessage = lastMessageRepository.findBy("chat_id", Long.class, userChatRelation.getChatId());
         lastMessageRepository.delete(lastMessage);
         lastMessageRepository.save(
                 new LastMessage(
@@ -40,12 +40,12 @@ public class MessageService implements IMessageService {
 
     @Override
     public Collection<Message> findAllByChatId(Long chatId) {
-        return messageRepository.findAllBy("chat_id", chatId);
+        return messageRepository.findAllBy("chat_id", Long.class, chatId);
     }
 
     @Override
     public Message findLastByChatId(Long chatId) {
-        LastMessage lastMessage = lastMessageRepository.findBy("chat_id", chatId);
+        LastMessage lastMessage = lastMessageRepository.findBy("chat_id", Long.class, chatId);
         return messageRepository.findById(lastMessage.getMessageId());
     }
 }

@@ -41,16 +41,16 @@ public class HibernateRepository<T> implements IRepository<T> {
     }
 
     @Override
-    public T findBy(String field, Object value) {
+    public <K> T findBy(String field, Class<K> clz, K value) {
         try (Session session = sessionManager.getSession()) {
-            return parametrizedQuery(session, field, value.toString()).getSingleResult();
+            return parametrizedQuery(session, field, clz, value).getSingleResult();
         }
     }
 
     @Override
-    public Collection<T> findAllBy(String field, Object value) {
+    public <K> Collection<T> findAllBy(String field, Class<K> clz, K value) {
         try (Session session = sessionManager.getSession()) {
-            return parametrizedQuery(session, field, value.toString()).getResultList();
+            return parametrizedQuery(session, field, clz, value).getResultList();
         }
     }
 
@@ -81,13 +81,13 @@ public class HibernateRepository<T> implements IRepository<T> {
         }
     }
 
-    private TypedQuery<T> parametrizedQuery(Session session, String field, String value){
+    private <K> TypedQuery<T> parametrizedQuery(Session session, String field, Class<K> clz, K value){
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> root = criteriaQuery.from(type);
         criteriaQuery.select(root);
 
-        ParameterExpression<String> params = criteriaBuilder.parameter(String.class);
+        ParameterExpression<K> params = criteriaBuilder.parameter(clz);
         criteriaQuery.where(criteriaBuilder.equal(root.get(field), params));
 
         TypedQuery<T> query = session.createQuery(criteriaQuery);

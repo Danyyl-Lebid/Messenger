@@ -1,7 +1,5 @@
 package com.github.messenger.repository;
 
-import org.hibernate.Session;
-
 import java.util.Collection;
 
 public interface IRepository<T> {
@@ -10,9 +8,9 @@ public interface IRepository<T> {
 
     T findById(Long id);
 
-    T findBy(String field, Object value);
+    <K> T findBy(String field, Class<K> clz, K value);
 
-    Collection<T> findAllBy(String field, Object value);
+    <K> Collection<T> findAllBy(String field, Class<K> clz, K value);
 
     void save(T entity);
 

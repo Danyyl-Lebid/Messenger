@@ -40,7 +40,7 @@ public class User {
     private String role;
 
     @Column(name = "status")
-    private String status;
+    private Status status;
 
     @Column(name = "last_online")
     private Long lastOnline;
@@ -70,7 +70,7 @@ public class User {
         this.nickname = nickname;
         this.phone = phone;
         this.role = role.toString();
-        this.status = status.toString();
+        this.status = status;
         this.lastOnline = lastOnline;
     }
 
@@ -147,11 +147,11 @@ public class User {
     }
 
     public Status getStatus() {
-        return Status.valueOf(status);
+        return status;
     }
 
     public void setStatus(Status status) {
-        this.status = status.toString();
+        this.status = status;
     }
 
     public Long getLastOnline() {

@@ -30,7 +30,7 @@ public class ChatService implements IChatService {
 
     @Override
     public Collection<Chat> findByName(String name) {
-        return chatRepository.findAllBy("name", name);
+        return chatRepository.findAllBy("name", String.class, name);
     }
 
     @Override

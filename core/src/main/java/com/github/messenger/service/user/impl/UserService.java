@@ -31,17 +31,17 @@ public class UserService implements IUserService {
 
     @Override
     public User findByLogin(String login) {
-        return this.userRepository.findBy("login", login);
+        return this.userRepository.findBy("login", String.class, login);
     }
 
     @Override
     public User findByEmail(String email) {
-        return this.userRepository.findBy("email", email);
+        return this.userRepository.findBy("email", String.class, email);
     }
 
     @Override
     public User findByNickname(String nickname) {
-        return this.userRepository.findBy("nickname", nickname);
+        return this.userRepository.findBy("nickname", String.class, nickname);
     }
 
     @Override

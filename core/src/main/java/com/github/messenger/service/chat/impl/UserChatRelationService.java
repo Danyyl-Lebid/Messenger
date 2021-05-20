@@ -24,7 +24,7 @@ public class UserChatRelationService implements IUserChatRelationService {
 
     @Override
     public void removeRelation(UserChatRelation relation) {
-        Collection<UserChatRelation> usersInChat = userChatRelationRepository.findAllBy("chat_id", relation.getChatId());
+        Collection<UserChatRelation> usersInChat = userChatRelationRepository.findAllBy("chatId", Long.class, relation.getChatId());
         for(UserChatRelation user : usersInChat){
             if(Objects.equals(user.getUserId(), relation.getUserId())){
                 userChatRelationRepository.delete(user);
@@ -35,13 +35,13 @@ public class UserChatRelationService implements IUserChatRelationService {
 
     @Override
     public List<Long> findAllUsersByChatId(Long chatId) {
-        Collection<UserChatRelation> usersInChat = userChatRelationRepository.findAllBy("chat_id", chatId);
+        Collection<UserChatRelation> usersInChat = userChatRelationRepository.findAllBy("chatId", Long.class, chatId);
         return usersInChat.stream().map(UserChatRelation::getUserId).collect(Collectors.toList());
     }
 
     @Override
     public List<Long> findAllChatsByUserId(Long userId) {
-        Collection<UserChatRelation> chatOfUser = userChatRelationRepository.findAllBy("user_id", userId);
+        Collection<UserChatRelation> chatOfUser = userChatRelationRepository.findAllBy("userId", Long.class, userId);
         return chatOfUser.stream().map(UserChatRelation::getUserId).collect(Collectors.toList());
     }
 }

@@ -101,9 +101,11 @@ public class ChatServiceTest {
         Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
-    @Test (expected = NullPointerException.class)
+    @Test
     public void findAllByNameNull(){
-        service.findByName(null);
+        Collection<Chat> exp = new ArrayList<>();
+        Collection<Chat> act = service.findByName(null);
+        Assert.assertEquals(exp, act);
     }
 
     @Test

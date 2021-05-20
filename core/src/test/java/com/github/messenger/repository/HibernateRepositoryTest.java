@@ -99,7 +99,7 @@ public class HibernateRepositoryTest {
     public void findAllByFirstname() {
         Collection<User> exp = new ArrayList<>();
         exp.add(mockUserArray[0]);
-        Collection<User> act = repository.findAllBy("firstname", "firstname_User1");
+        Collection<User> act = repository.findAllBy("firstname", String.class, "firstname_User1");
         Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
@@ -107,73 +107,53 @@ public class HibernateRepositoryTest {
     public void findAllByLastname() {
         Collection<User> exp = new ArrayList<>();
         exp.add(mockUserArray[1]);
-        Collection<User> act = repository.findAllBy("lastname", "lastname_User2");
+        Collection<User> act = repository.findAllBy("lastname", String.class, "lastname_User2");
         Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
     @Test
     public void findAllByFirstnameNotPresented() {
         Collection<User> exp = new ArrayList<>();
-        Collection<User> act = repository.findAllBy("firstname", "not_presented");
+        Collection<User> act = repository.findAllBy("firstname", String.class, "not_presented");
         Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
     @Test
     public void findByLogin() {
         User exp = mockUserArray[2];
-        User act = repository.findBy("login", "login_User3");
+        User act = repository.findBy("login", String.class, "login_User3");
         Assert.assertEquals(exp, act);
     }
 
     @Test (expected = NoResultException.class)
     public void findByLoginNotPresented() {
-        Assert.assertNull(repository.findBy("login", "not_presented"));
+        Assert.assertNull(repository.findBy("login", String.class, "not_presented"));
     }
 
     @Test
     public void findByNickname() {
         User exp = mockUserArray[3];
-        User act = repository.findBy("nickname", "nickname_Admin1");
+        User act = repository.findBy("nickname", String.class, "nickname_Admin1");
         Assert.assertEquals(exp, act);
     }
 
     @Test
     public void findByEmail() {
         User exp = mockUserArray[4];
-        User act = repository.findBy("email", "email_Admin2");
+        User act = repository.findBy("email", String.class, "email_Admin2");
         Assert.assertEquals(exp, act);
     }
 
     @Test
     public void findByPhone() {
         User exp = mockUserArray[5];
-        User act = repository.findBy("phone", "phone_Admin3");
+        User act = repository.findBy("phone", String.class, "phone_Admin3");
         Assert.assertEquals(exp, act);
-    }
-
-    @Test
-    public void findAllByRoleUser() {
-        Collection<User> exp = new ArrayList<>();
-        exp.add(mockUserArray[0]);
-        exp.add(mockUserArray[1]);
-        exp.add(mockUserArray[2]);
-        Collection<User> act = repository.findAllBy("role", Role.USER);
-        Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
-    }
-
-    @Test
-    public void findAllByRoleAdmin() {
-        Collection<User> exp = new ArrayList<>();
-        exp.add(mockUserArray[3]);
-        exp.add(mockUserArray[4]);
-        exp.add(mockUserArray[5]);
-        Collection<User> act = repository.findAllBy("role", Role.ADMIN);
-        Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void findAllByWrongField() {
-        Collection<User> act = repository.findAllBy("wrong", "wrong");
+        Collection<User> act = repository.findAllBy("wrong", String.class, "wrong");
     }
 
     @Test
@@ -238,7 +218,7 @@ public class HibernateRepositoryTest {
 
     @Test (expected = PersistenceException.class)
     public void updateSameLogin() {
-        User user = repository.findBy("login", "login_User1");
+        User user = repository.findBy("login", String.class, "login_User1");
         user.setLogin("login_User2");
         repository.update(user);
     }
