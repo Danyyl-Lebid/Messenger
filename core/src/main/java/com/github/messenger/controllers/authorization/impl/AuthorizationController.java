@@ -6,11 +6,9 @@ import com.github.messenger.entity.User;
 import com.github.messenger.exceptions.BadRequest;
 import com.github.messenger.payload.PrivateToken;
 import com.github.messenger.payload.PublicToken;
+import com.github.messenger.payload.Status;
 import com.github.messenger.service.user.IUserService;
-import com.github.messenger.utils.JsonHelper;
-import com.github.messenger.utils.PrivateTokenProvider;
-import com.github.messenger.utils.PublicTokenProvider;
-import com.github.messenger.utils.RegexUtils;
+import com.github.messenger.utils.*;
 
 public class AuthorizationController implements IAuthorizationController {
 
@@ -28,7 +26,10 @@ public class AuthorizationController implements IAuthorizationController {
         User user = findUser(dto);
         PrivateToken privateToken = new PrivateToken(user.getLogin(), 30);
         PublicToken publicToken = new PublicToken(user.getRole(), user.getNickname());
-        return PublicTokenProvider.encode(publicToken) + "." + PrivateTokenProvider.encode(privateToken);
+        String result = PublicTokenProvider.encode(publicToken) + "." + PrivateTokenProvider.encode(privateToken);
+        user.setStatus(Status.ONLINE);
+        user.setLastOnline(System.currentTimeMillis());
+        return result;
     }
 
     private User findUser(UserAuthDto dto){

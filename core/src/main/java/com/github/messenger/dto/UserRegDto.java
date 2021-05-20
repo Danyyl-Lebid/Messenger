@@ -2,6 +2,7 @@ package com.github.messenger.dto;
 
 import com.github.messenger.payload.Role;
 import com.github.messenger.entity.User;
+import com.github.messenger.payload.Status;
 
 import java.util.Objects;
 
@@ -147,7 +148,9 @@ public class UserRegDto {
                 this.email,
                 this.nickname,
                 this.phone,
-                Role.USER
+                Role.USER,
+                Status.OFFLINE,
+                0L
         );
     }
 

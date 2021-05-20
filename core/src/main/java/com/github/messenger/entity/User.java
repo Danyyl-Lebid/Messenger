@@ -1,6 +1,7 @@
 package com.github.messenger.entity;
 
 import com.github.messenger.payload.Role;
+import com.github.messenger.payload.Status;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -38,6 +39,12 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "last_online")
+    private Long lastOnline;
+
     public User() {
     }
 
@@ -50,7 +57,9 @@ public class User {
             String email,
             String nickname,
             String phone,
-            Role role
+            Role role,
+            Status status,
+            Long lastOnline
     ) {
         this.id = id;
         this.firstname = firstname;
@@ -61,6 +70,8 @@ public class User {
         this.nickname = nickname;
         this.phone = phone;
         this.role = role.toString();
+        this.status = status.toString();
+        this.lastOnline = lastOnline;
     }
 
     public Long getId() {
@@ -71,19 +82,19 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
+    public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstName(String firstname) {
+    public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
-    public String getLastName() {
+    public String getLastname() {
         return lastname;
     }
 
-    public void setLastName(String lastname) {
+    public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
@@ -135,6 +146,22 @@ public class User {
         this.role = role.toString();
     }
 
+    public Status getStatus() {
+        return Status.valueOf(status);
+    }
+
+    public void setStatus(Status status) {
+        this.status = status.toString();
+    }
+
+    public Long getLastOnline() {
+        return lastOnline;
+    }
+
+    public void setLastOnline(Long lastOnline) {
+        this.lastOnline = lastOnline;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,28 +175,30 @@ public class User {
                 Objects.equals(email, user.email) &&
                 Objects.equals(nickname, user.nickname) &&
                 Objects.equals(phone, user.phone) &&
-                Objects.equals(role, user.role);
+                Objects.equals(role, user.role) &&
+                Objects.equals(status, user.status) &&
+                Objects.equals(lastOnline, user.lastOnline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                id, firstname, lastname, login,
-                password, email, nickname, phone, role);
+        return Objects.hash(id, firstname, lastname, login, password, email, nickname, phone, role, status, lastOnline);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", firstName='" + firstname + '\'' +
-                ", lastName='" + lastname + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", phone='" + phone + '\'' +
-                ", role=" + role +
+                ", role='" + role + '\'' +
+                ", status='" + status + '\'' +
+                ", lastOnline='" + lastOnline + '\'' +
                 '}';
     }
 }
