@@ -2,6 +2,7 @@ package com.github.messenger.repository;
 
 import com.github.messenger.payload.Role;
 import com.github.messenger.entity.User;
+import com.github.messenger.payload.Status;
 import com.github.messenger.repository.impl.HibernateRepository;
 import com.github.messenger.utils.HibernateSessionManager;
 import org.hibernate.TransientObjectException;
@@ -26,16 +27,18 @@ public class HibernateRepositoryTest {
             "email",
             "nickname",
             "phone",
-            Role.USER
+            Role.USER,
+            Status.OFFLINE,
+            0L
     );
 
     private static final User[] mockUserArray = {
-            new User(null, "firstname_User1", "lastname_User1", "login_User1", "password_User1", "email_User1", "nickname_User1", "phone_User1", Role.USER),
-            new User(null, "firstname_User2", "lastname_User2", "login_User2", "password_User2", "email_User2", "nickname_User2", "phone_User2", Role.USER),
-            new User(null, "firstname_User3", "lastname_User3", "login_User3", "password_User3", "email_User3", "nickname_User3", "phone_User3", Role.USER),
-            new User(null, "firstname_Admin1", "lastname_Admin1", "login_Admin1", "password_Admin1", "email_Admin1", "nickname_Admin1", "phone_Admin1", Role.ADMIN),
-            new User(null, "firstname_Admin2", "lastname_Admin2", "login_Admin2", "password_Admin2", "email_Admin2", "nickname_Admin2", "phone_Admin2", Role.ADMIN),
-            new User(null, "firstname_Admin3", "lastname_Admin3", "login_Admin3", "password_Admin3", "email_Admin3", "nickname_Admin3", "phone_Admin3", Role.ADMIN),
+            new User(null, "firstname_User1", "lastname_User1", "login_User1", "password_User1", "email_User1", "nickname_User1", "phone_User1", Role.USER, Status.OFFLINE, 0L),
+            new User(null, "firstname_User2", "lastname_User2", "login_User2", "password_User2", "email_User2", "nickname_User2", "phone_User2", Role.USER, Status.OFFLINE, 0L),
+            new User(null, "firstname_User3", "lastname_User3", "login_User3", "password_User3", "email_User3", "nickname_User3", "phone_User3", Role.USER, Status.OFFLINE, 0L),
+            new User(null, "firstname_Admin1", "lastname_Admin1", "login_Admin1", "password_Admin1", "email_Admin1", "nickname_Admin1", "phone_Admin1", Role.ADMIN, Status.OFFLINE, 0L),
+            new User(null, "firstname_Admin2", "lastname_Admin2", "login_Admin2", "password_Admin2", "email_Admin2", "nickname_Admin2", "phone_Admin2", Role.ADMIN, Status.OFFLINE, 0L),
+            new User(null, "firstname_Admin3", "lastname_Admin3", "login_Admin3", "password_Admin3", "email_Admin3", "nickname_Admin3", "phone_Admin3", Role.ADMIN, Status.OFFLINE, 0L),
     };
 
     @Before
@@ -212,7 +215,9 @@ public class HibernateRepositoryTest {
                 "email_User1",
                 "nickname_User1",
                 "phone_User1",
-                Role.USER
+                Role.USER,
+                Status.OFFLINE,
+                0L
         ));
     }
 
@@ -227,7 +232,9 @@ public class HibernateRepositoryTest {
                 "email_User1",
                 "nickname_User1",
                 "phone_User1",
-                Role.USER
+                Role.USER,
+                Status.OFFLINE,
+                0L
         ));
     }
 
@@ -258,7 +265,9 @@ public class HibernateRepositoryTest {
                 "email_User1",
                 "nickname_User1",
                 "phone_User1",
-                Role.USER
+                Role.USER,
+                Status.OFFLINE,
+                0L
         ));
         Collection<User> exp = new ArrayList<>(Arrays.asList(mockUserArray));
         Collection<User> act = repository.findAll();
@@ -276,7 +285,9 @@ public class HibernateRepositoryTest {
                 "email_User1",
                 "nickname_User1",
                 "phone_User1",
-                Role.USER
+                Role.USER,
+                Status.OFFLINE,
+                0L
         ));
         Collection<User> exp = new ArrayList<>(Arrays.asList(mockUserArray));
         Collection<User> act = repository.findAll();
