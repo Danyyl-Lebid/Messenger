@@ -34,9 +34,4 @@ public class ChatService implements IChatService {
     public void update(Chat chat) {
         chatRepository.update(chat);
     }
-
-    @Override
-    public void delete(Chat chat) {
-        chatRepository.delete(chat);
-    }
 }

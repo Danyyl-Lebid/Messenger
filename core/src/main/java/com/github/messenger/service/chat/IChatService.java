@@ -16,6 +16,4 @@ public interface IChatService {
 
     void update(Chat chat);
 
-    void delete(Chat chat);
-
 }
