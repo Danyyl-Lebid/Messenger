@@ -69,7 +69,6 @@ public class UserServiceTest {
         }
     }
 
-
     @Test
     public void findAll() {
         Collection<User> exp = Arrays.asList(mockUserArray);
@@ -182,7 +181,7 @@ public class UserServiceTest {
     @Test (expected = UpdateError.class)
     public void updateNotPresentedId() {
         service.update(new User(
-                1L,
+                0L,
                 "firstname_User1",
                 "lastname_User1",
                 "login_User1",

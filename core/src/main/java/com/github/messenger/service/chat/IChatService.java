@@ -8,11 +8,13 @@ import java.util.List;
 
 public interface IChatService {
 
-    Chat create(Chat chat);
+    Collection<Chat> findAll();
 
     Chat findById(Long id);
 
     Collection<Chat> findByName(String name);
+
+    void create(Chat chat);
 
     void update(Chat chat);
 

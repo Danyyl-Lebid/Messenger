@@ -15,16 +15,12 @@ public class Chat {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "last_message_id")
-    private Long lastMessageId;
-
     public Chat() {
     }
 
-    public Chat(Long id, String name, Long lastMessageId) {
+    public Chat(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.lastMessageId = lastMessageId;
     }
 
     public Long getId() {
@@ -43,25 +39,17 @@ public class Chat {
         this.name = name;
     }
 
-    public Long getLastMessageId() {
-        return lastMessageId;
-    }
-
-    public void setLastMessageId(Long lastMessageId) {
-        this.lastMessageId = lastMessageId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Chat chat = (Chat) o;
-        return Objects.equals(id, chat.id) && Objects.equals(name, chat.name) && Objects.equals(lastMessageId, chat.lastMessageId);
+        return Objects.equals(id, chat.id) && Objects.equals(name, chat.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, lastMessageId);
+        return Objects.hash(id, name);
     }
 
     @Override
@@ -69,7 +57,6 @@ public class Chat {
         return "Chat{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", lastMessageId=" + lastMessageId +
                 '}';
     }
 }

@@ -1,9 +1,13 @@
 package com.github.messenger.service.chat.impl;
 
 import com.github.messenger.entity.Chat;
+import com.github.messenger.exceptions.Conflict;
+import com.github.messenger.exceptions.UpdateError;
 import com.github.messenger.repository.IRepository;
 import com.github.messenger.service.chat.IChatService;
+import org.hibernate.exception.ConstraintViolationException;
 
+import javax.persistence.PersistenceException;
 import java.util.Collection;
 
 public class ChatService implements IChatService {
@@ -15,9 +19,8 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public Chat create(Chat chat) {
-        chatRepository.save(chat);
-        return chat;
+    public Collection<Chat> findAll() {
+        return chatRepository.findAll();
     }
 
     @Override
@@ -31,7 +34,20 @@ public class ChatService implements IChatService {
     }
 
     @Override
+    public void create(Chat chat) {
+        try {
+            chatRepository.save(chat);
+        } catch (ConstraintViolationException e) {
+            throw new Conflict();
+        }
+    }
+
+    @Override
     public void update(Chat chat) {
-        chatRepository.update(chat);
+        try {
+            chatRepository.update(chat);
+        } catch (PersistenceException e) {
+            throw new UpdateError();
+        }
     }
 }
