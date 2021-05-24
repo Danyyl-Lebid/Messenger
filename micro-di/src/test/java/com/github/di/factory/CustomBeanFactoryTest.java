@@ -31,7 +31,7 @@ public class CustomBeanFactoryTest {
         assertEquals("ololololo", firstBean.getUnconfigurationClass().getStr());
         //System.out.println(repo.getMyValue());
         HibernateClass hibernateClass = factory.instance(HibernateClass.class);
-        System.out.println("Ress " + hibernateClass.getStr());
+        System.out.println(hibernateClass.getStr());
     }
 
 
