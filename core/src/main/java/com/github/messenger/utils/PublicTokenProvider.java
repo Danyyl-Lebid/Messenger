@@ -26,8 +26,7 @@ public class PublicTokenProvider {
 
     private static final String SALT = "ServletChat";
 
-    private static byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+//    private static byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public static String encode(PublicToken token) {
         if (token == null) {
@@ -35,11 +34,11 @@ public class PublicTokenProvider {
         }
         String str = JsonHelper.toJson(token).orElseThrow(InternalError::new);
         try {
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+//            IvParameterSpec ivspec = new IvParameterSpec(iv);
             SecretKeySpec secretKey = getSecretKeySpec();
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivspec);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             return Base64.getEncoder()
                     .encodeToString(cipher.doFinal(str.getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
@@ -54,11 +53,11 @@ public class PublicTokenProvider {
         PublicToken token = null;
 
         try {
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+//            IvParameterSpec ivspec = new IvParameterSpec(iv);
             SecretKeySpec secretKey = getSecretKeySpec();
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
             token = JsonHelper.fromJson(new String(cipher.doFinal(Base64.getDecoder().decode(str))), PublicToken.class).orElseThrow(BadRequest::new);
         } catch (Exception e) {
             log.error("Error while decrypting: " + e);
@@ -67,7 +66,7 @@ public class PublicTokenProvider {
     }
 
     private static SecretKeySpec getSecretKeySpec() throws InvalidKeySpecException, NoSuchAlgorithmException {
-        IvParameterSpec ivspec = new IvParameterSpec(iv);
+//        IvParameterSpec ivspec = new IvParameterSpec(iv);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), SALT.getBytes(), 65536, 256);
         SecretKey tmp = factory.generateSecret(spec);
