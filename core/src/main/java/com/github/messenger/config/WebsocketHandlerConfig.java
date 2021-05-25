@@ -10,7 +10,7 @@ public class WebsocketHandlerConfig {
 
     private static final Broker broker = new Broker();
 
-    private static final WebsocketHandler websocketHandler = new WebsocketHandler(getWebsocketConnectionPool(), getBroker());
+    private static final WebsocketHandler websocketHandler = new WebsocketHandler(getWebsocketConnectionPool(), getBroker(), ServiceConfig.getGlobalMessageService());
 
     public static WebsocketHandler getWebsocketHandler() {
         return websocketHandler;

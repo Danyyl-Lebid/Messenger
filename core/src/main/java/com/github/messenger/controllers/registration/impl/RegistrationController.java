@@ -1,7 +1,7 @@
 package com.github.messenger.controllers.registration.impl;
 
 import com.github.messenger.controllers.registration.IRegistrationController;
-import com.github.messenger.dto.UserRegDto;
+import com.github.messenger.dto.user.UserRegDto;
 import com.github.messenger.exceptions.BadRequest;
 import com.github.messenger.service.user.IUserService;
 import com.github.messenger.utils.JsonHelper;

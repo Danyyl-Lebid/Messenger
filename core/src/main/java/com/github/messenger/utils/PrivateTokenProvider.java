@@ -75,14 +75,9 @@ public class PrivateTokenProvider {
 
     public static boolean validateToken(PrivateToken token) {
         if (token == null) {
-            log.info("Token is null!");
             return false;
         }
-        if (token.getExpireIn().compareTo(new Date()) < 0) {
-            log.info("Token expired!");
-            return false;
-        }
-        return true;
+        return token.getExpireIn().compareTo(new Date()) >= 0;
     }
 
 }

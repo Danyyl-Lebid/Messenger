@@ -1,4 +1,4 @@
-package com.github.messenger.dto;
+package com.github.messenger.dto.user;
 
 import java.util.Objects;
 

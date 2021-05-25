@@ -1,7 +1,7 @@
 package com.github.messenger.controllers.authorization.impl;
 
 import com.github.messenger.controllers.authorization.IAuthorizationController;
-import com.github.messenger.dto.UserAuthDto;
+import com.github.messenger.dto.user.UserAuthDto;
 import com.github.messenger.entity.User;
 import com.github.messenger.exceptions.BadRequest;
 import com.github.messenger.payload.PrivateToken;
@@ -20,20 +20,20 @@ public class AuthorizationController implements IAuthorizationController {
 
     @Override
     public String authorize(String json) {
-
         UserAuthDto dto = JsonHelper.fromJson(json, UserAuthDto.class)
                 .orElseThrow(BadRequest::new);
         User user = findUser(dto);
-        PrivateToken privateToken = new PrivateToken(user.getLogin(), 30);
+        PrivateToken privateToken = new PrivateToken(user.getId(), user.getLogin(), 30);
         PublicToken publicToken = new PublicToken(user.getRole(), user.getNickname());
         String result = PublicTokenProvider.encode(publicToken) + "." + PrivateTokenProvider.encode(privateToken);
         user.setStatus(Status.ONLINE);
         user.setLastOnline(System.currentTimeMillis());
+        userService.update(user);
         return result;
     }
 
-    private User findUser(UserAuthDto dto){
-        if (RegexUtils.isValidEmail(dto.getLogin())){
+    private User findUser(UserAuthDto dto) {
+        if (RegexUtils.isValidEmail(dto.getLogin())) {
             return userService.findByEmail(dto.getLogin());
         } else {
             return userService.findByLogin(dto.getLogin());

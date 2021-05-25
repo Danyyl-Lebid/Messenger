@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class PrivateToken {
 
+    private Long id;
+
     private String login;
 
     private Date createdAt;
@@ -16,16 +18,26 @@ public class PrivateToken {
     public PrivateToken() {
     }
 
-    public PrivateToken(String login, Date createdAt, Date expireIn) {
+    public PrivateToken(Long id, String login, Date createdAt, Date expireIn) {
+        this.id = id;
         this.login = login;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(String login, int lifetimeInMinutes) {
+    public PrivateToken(Long id, String login, int lifetimeInMinutes) {
+        this.id = id;
         this.login = login;
         this.createdAt = DateUtils.getCurrentDate();
         this.expireIn = DateUtils.addMinutes(this.createdAt, lifetimeInMinutes);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -57,21 +69,21 @@ public class PrivateToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivateToken that = (PrivateToken) o;
-        return Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
+        return Objects.equals(id, that.id) && Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, createdAt, expireIn);
+        return Objects.hash(id, login, createdAt, expireIn);
     }
 
     @Override
     public String toString() {
         return "PrivateToken{" +
-                "login='" + login + '\'' +
+                "id=" + id +
+                ", login='" + login + '\'' +
                 ", createdAt=" + createdAt +
                 ", expireIn=" + expireIn +
                 '}';
     }
-
 }

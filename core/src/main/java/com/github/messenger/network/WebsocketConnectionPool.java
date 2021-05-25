@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WebsocketConnectionPool {
 
-    private ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Session> sessions = new ConcurrentHashMap<>();
 
     public void addSession(String login, Session session) {
         this.sessions.put(login, session);
