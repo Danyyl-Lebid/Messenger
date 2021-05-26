@@ -25,11 +25,13 @@ public class CustomBeanFactory {
 
     private Map<String, Object> properties = new HashMap<>();
 
-    private Map<Class<?>, List<Class<?>>> adjacency = new HashMap<>();
-
     private Map<Class<?>, Object> container = new HashMap<>();
 
-    public static CustomBeanFactory getInstance() {
+    private Map<Class<?>, List<Class<?>>> adjacency = new HashMap<>();
+
+    private List<Class<?>> interfaces = new ArrayList<>();
+
+    public static CustomBeanFactory factory() {
         return instance;
     }
 
@@ -45,17 +47,31 @@ public class CustomBeanFactory {
                         clz.isAnnotationPresent(CustomRepository.class) ||
                         clz.isAnnotationPresent(CustomConfiguration.class)
         ).collect(Collectors.toMap(Function.identity(), v -> new ArrayList()));
+        List<Class<?>> interfaces = classes.stream()
+                .filter(Class::isInterface)
+                .collect(Collectors.toList());
+
+        for (Class<?> clz : interfaces) {
+            for (Class<?> clz1 : classes) {
+                Class<?>[] inter = clz1.getInterfaces();
+                for (Class<?> i : inter) {
+                    if (i.equals(clz)) {
+                        this.interfaces.add(clz1);
+                    }
+                }
+            }
+        }
     }
 
     public void dependency() {
         Set<Class<?>> keys = this.adjacency.keySet();
         for (Class<?> source : keys) {
-            List<Class<?>> sourceClasses = ReflectionUtils.findFinalFields(source);
+            List<Class<?>> sourceClasses = ReflectionUtils.findFinalFields(source, this.interfaces);
             if (this.adjacency.containsKey(source)) {
                 this.adjacency.put(source, sourceClasses);
             }
             for (Class<?> destination : sourceClasses) {
-                List<Class<?>> destinationClasses = ReflectionUtils.findFinalFields(destination);
+                List<Class<?>> destinationClasses = ReflectionUtils.findFinalFields(destination, this.interfaces);
                 if (this.adjacency.containsKey(destination)) {
                     this.adjacency.put(destination, destinationClasses);
                 }

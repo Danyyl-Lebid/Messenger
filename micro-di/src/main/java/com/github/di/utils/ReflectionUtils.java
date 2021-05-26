@@ -23,6 +23,23 @@ public class ReflectionUtils {
         return result;
     }
 
+    public static List<Class<?>> findFinalFields(Class<?> clz, List<Class<?>> classes) {
+        List<Class<?>> result = new ArrayList<>();
+        Field[] fields = clz.getDeclaredFields();
+        for (Field field : fields) {
+            if ((field.getModifiers() & Modifier.FINAL) == Modifier.FINAL) {
+                if (field.getType().isInterface()){
+                    Class<?> type = classes.stream().filter(c -> c.getSimpleName().equalsIgnoreCase(field.getName()))
+                            .findFirst().orElseThrow();
+                    result.add(type);
+                } else {
+                    result.add(field.getType());
+                }
+            }
+        }
+        return result;
+    }
+
     public static Object newInstanceWithoutParams(Class<?> clz) {
         try {
             return clz.getConstructor().newInstance();

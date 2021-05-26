@@ -17,7 +17,7 @@ public class CustomBeanFactoryTest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("my.value", "hello world");
         properties.put("new.injected.value", "ololololo");
-        CustomBeanFactory factory = CustomBeanFactory.getInstance();
+        CustomBeanFactory factory = CustomBeanFactory.factory();
         factory.setProperties(properties);
         factory.registration(FirstBean.class);
         //factory.dependency();
@@ -32,6 +32,8 @@ public class CustomBeanFactoryTest {
         //System.out.println(repo.getMyValue());
         HibernateClass hibernateClass = factory.instance(HibernateClass.class);
         System.out.println(hibernateClass.getStr());
+
+        assertEquals("My name is Tony", firstBean.getfIrstRelease().getName());
     }
 
 

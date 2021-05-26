@@ -9,6 +9,8 @@ import com.github.messenger.payload.PublicToken;
 import com.github.messenger.payload.Status;
 import com.github.messenger.service.user.IUserService;
 import com.github.messenger.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuthorizationController implements IAuthorizationController {
 
@@ -39,6 +41,4 @@ public class AuthorizationController implements IAuthorizationController {
             return userService.findByLogin(dto.getLogin());
         }
     }
-
-
 }
