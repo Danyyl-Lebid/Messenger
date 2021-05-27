@@ -31,8 +31,9 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public void broadcast(Long chatId, String payload) {
-        broker.broadcast(roomConnectionPools.getConnectionPool(chatId).getSessions(), payload);
+    public void broadcast(String payload) {
+        MessageDto dto = JsonHelper.fromJson(payload, MessageDto.class).orElseThrow(IncorrectPayload::new);
+        broker.broadcast(roomConnectionPools.getConnectionPool(dto.getChatId()).getSessions(), payload);
     }
 
     @Override

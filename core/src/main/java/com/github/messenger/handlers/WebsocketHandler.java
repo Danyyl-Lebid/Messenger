@@ -1,6 +1,7 @@
 package com.github.messenger.handlers;
 
 import com.github.messenger.controllers.global.message.IGlobalMessageController;
+import com.github.messenger.controllers.message.IMessageController;
 import com.github.messenger.exceptions.ExpiredToken;
 import com.github.messenger.network.Broker;
 import com.github.messenger.network.RoomConnectionPools;
@@ -25,18 +26,22 @@ public class WebsocketHandler {
 
     private final IGlobalMessageController globalMessageController;
 
+    private final IMessageController messageController;
+
     private final Broker broker;
 
     public WebsocketHandler(
             WebsocketConnectionPool globalConnectionPool,
             RoomConnectionPools roomConnectionPools,
             Broker broker,
-            IGlobalMessageController globalMessageController
+            IGlobalMessageController globalMessageController,
+            IMessageController messageController
     ) {
         this.globalConnectionPool = globalConnectionPool;
         this.roomConnectionPools = roomConnectionPools;
         this.broker = broker;
         this.globalMessageController = globalMessageController;
+        this.messageController = messageController;
     }
 
     @OnMessage
@@ -57,6 +62,9 @@ public class WebsocketHandler {
                     globalMessageController.save(result.getUserId(), envelope.getPayload());
                     globalMessageController.broadcast(envelope.getPayload());
                     break;
+                case MESSAGE:
+                    messageController.save(result.getUserId(), envelope.getPayload());
+                    messageController.broadcast(envelope.getPayload());
                 case LOGOUT:
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     globalConnectionPool.removeSession(result.getUserId());

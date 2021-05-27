@@ -6,7 +6,7 @@ public interface IMessageController {
 
     void sendHistory(Session session);
 
-    void broadcast(Long chatId, String payload);
+    void broadcast(String payload);
 
     void save(Long userId, String payload);
 
