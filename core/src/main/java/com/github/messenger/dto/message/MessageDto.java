@@ -6,6 +6,8 @@ public class MessageDto {
 
     private Long chatId;
 
+    private String nickname;
+
     private String text;
 
     private Long time;
@@ -13,8 +15,9 @@ public class MessageDto {
     public MessageDto() {
     }
 
-    public MessageDto(Long chatId, String text, Long time) {
+    public MessageDto(Long chatId, String nickname, String text, Long time) {
         this.chatId = chatId;
+        this.nickname = nickname;
         this.text = text;
         this.time = time;
     }
@@ -25,6 +28,14 @@ public class MessageDto {
 
     public void setChatId(Long chatId) {
         this.chatId = chatId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getText() {
@@ -47,19 +58,20 @@ public class MessageDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MessageDto that = (MessageDto) o;
-        return Objects.equals(chatId, that.chatId) && Objects.equals(text, that.text) && Objects.equals(time, that.time);
+        MessageDto dto = (MessageDto) o;
+        return Objects.equals(chatId, dto.chatId) && Objects.equals(nickname, dto.nickname) && Objects.equals(text, dto.text) && Objects.equals(time, dto.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatId, text, time);
+        return Objects.hash(chatId, nickname, text, time);
     }
 
     @Override
     public String toString() {
         return "MessageDto{" +
                 "chatId=" + chatId +
+                ", nickname='" + nickname + '\'' +
                 ", text='" + text + '\'' +
                 ", time=" + time +
                 '}';

@@ -43,6 +43,7 @@ public class MessageController implements IMessageController {
                 null,
                 userId,
                 dto.getChatId(),
+                dto.getNickname(),
                 dto.getText(),
                 dto.getTime()
         );
