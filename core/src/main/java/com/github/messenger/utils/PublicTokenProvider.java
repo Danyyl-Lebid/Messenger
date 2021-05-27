@@ -24,7 +24,7 @@ public class PublicTokenProvider {
 
     private static final String SECRET_KEY = "NotTheBestChoice";
 
-    private static final String SALT = "ServletChat";
+    private static final String SALT = "";
 
 //    private static byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 

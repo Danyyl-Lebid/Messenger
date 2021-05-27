@@ -2,15 +2,28 @@ package com.github.messenger.config;
 
 import com.github.messenger.handlers.WebsocketHandler;
 import com.github.messenger.network.Broker;
+import com.github.messenger.network.RoomConnectionPools;
 import com.github.messenger.network.WebsocketConnectionPool;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WebsocketHandlerConfig {
 
     private static final WebsocketConnectionPool websocketConnectionPool = new WebsocketConnectionPool();
 
+    private static final RoomConnectionPools roomConnectionPools = new RoomConnectionPools(
+            ServiceConfig.getChatService(), ServiceConfig.getUserChatRelationService()
+    );
+
     private static final Broker broker = new Broker();
 
-    private static final WebsocketHandler websocketHandler = new WebsocketHandler(getWebsocketConnectionPool(), getBroker(), ServiceConfig.getGlobalMessageService());
+    private static final WebsocketHandler websocketHandler = new WebsocketHandler(
+            getWebsocketConnectionPool(),
+            roomConnectionPools,
+            getBroker(),
+            ControllerConfig.getGlobalMessageController()
+    );
 
     public static WebsocketHandler getWebsocketHandler() {
         return websocketHandler;

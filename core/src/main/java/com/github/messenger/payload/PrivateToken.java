@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class PrivateToken {
 
-    private Long id;
+    private Long userId;
 
     private String login;
 
@@ -18,26 +18,26 @@ public class PrivateToken {
     public PrivateToken() {
     }
 
-    public PrivateToken(Long id, String login, Date createdAt, Date expireIn) {
-        this.id = id;
+    public PrivateToken(Long userId, String login, Date createdAt, Date expireIn) {
+        this.userId = userId;
         this.login = login;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(Long id, String login, int lifetimeInMinutes) {
-        this.id = id;
+    public PrivateToken(Long userId, String login, int lifetimeInMinutes) {
+        this.userId = userId;
         this.login = login;
         this.createdAt = DateUtils.getCurrentDate();
         this.expireIn = DateUtils.addMinutes(this.createdAt, lifetimeInMinutes);
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getLogin() {
@@ -69,18 +69,18 @@ public class PrivateToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivateToken that = (PrivateToken) o;
-        return Objects.equals(id, that.id) && Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
+        return Objects.equals(userId, that.userId) && Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, createdAt, expireIn);
+        return Objects.hash(userId, login, createdAt, expireIn);
     }
 
     @Override
     public String toString() {
         return "PrivateToken{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", login='" + login + '\'' +
                 ", createdAt=" + createdAt +
                 ", expireIn=" + expireIn +

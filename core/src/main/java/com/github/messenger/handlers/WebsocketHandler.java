@@ -1,14 +1,12 @@
 package com.github.messenger.handlers;
 
-import com.github.messenger.dto.message.GlobalMessageDto;
-import com.github.messenger.entity.GlobalMessage;
+import com.github.messenger.controllers.global.message.IGlobalMessageController;
 import com.github.messenger.exceptions.ExpiredToken;
-import com.github.messenger.exceptions.IncorrectPayload;
 import com.github.messenger.network.Broker;
+import com.github.messenger.network.RoomConnectionPools;
 import com.github.messenger.network.WebsocketConnectionPool;
 import com.github.messenger.payload.Envelope;
 import com.github.messenger.payload.PrivateToken;
-import com.github.messenger.service.message.IGlobalMessageService;
 import com.github.messenger.utils.JsonHelper;
 import com.github.messenger.utils.PrivateTokenProvider;
 import org.slf4j.Logger;
@@ -21,19 +19,24 @@ public class WebsocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(WebsocketHandler.class);
 
-    private final WebsocketConnectionPool websocketConnectionPool;
+    private final WebsocketConnectionPool globalConnectionPool;
 
-    private final IGlobalMessageService globalMessageService;
+    private final RoomConnectionPools roomConnectionPools;
+
+    private final IGlobalMessageController globalMessageController;
 
     private final Broker broker;
 
     public WebsocketHandler(
-            WebsocketConnectionPool websocketConnectionPool,
+            WebsocketConnectionPool globalConnectionPool,
+            RoomConnectionPools roomConnectionPools,
             Broker broker,
-            IGlobalMessageService globalMessageService) {
-        this.websocketConnectionPool = websocketConnectionPool;
+            IGlobalMessageController globalMessageController
+    ) {
+        this.globalConnectionPool = globalConnectionPool;
+        this.roomConnectionPools = roomConnectionPools;
         this.broker = broker;
-        this.globalMessageService = globalMessageService;
+        this.globalMessageController = globalMessageController;
     }
 
     @OnMessage
@@ -46,25 +49,17 @@ public class WebsocketHandler {
             }
             switch (envelope.getTopic()) {
                 case LOGIN:
-                    websocketConnectionPool.addSession(result.getLogin(), session);
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
+                    globalConnectionPool.addSession(result.getUserId(), session);
+                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
                 case GLOBAL_MESSAGE:
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
-                    broker.send(session,envelope);
-                    GlobalMessageDto dto = JsonHelper.fromJson(envelope.getPayload(), GlobalMessageDto.class).orElseThrow(IncorrectPayload::new);
-                    GlobalMessage globalMessage = new GlobalMessage(
-                            null,
-                            result.getId(),
-                            dto.getText(),
-                            dto.getTime()
-                    );
-                    globalMessageService.save(globalMessage);
+                    globalMessageController.save(result.getUserId(), envelope.getPayload());
+                    globalMessageController.broadcast(envelope.getPayload());
                     break;
                 case LOGOUT:
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
-                    websocketConnectionPool.removeSession(result.getLogin());
-                    websocketConnectionPool.getSession(result.getLogin()).close();
+                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    globalConnectionPool.removeSession(result.getUserId());
+                    globalConnectionPool.getSession(result.getUserId()).close();
                     break;
             }
         } catch (Throwable e) {

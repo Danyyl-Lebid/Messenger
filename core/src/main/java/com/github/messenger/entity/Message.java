@@ -12,9 +12,6 @@ public class Message {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_chat_id")
-    private Long userChatId;
-
     @Column(name = "chat_id")
     private Long chatId;
 
@@ -30,9 +27,8 @@ public class Message {
     public Message() {
     }
 
-    public Message(Long id, Long userChatId, Long chatId, String topic, String text, Long time) {
+    public Message(Long id, Long chatId, String topic, String text, Long time) {
         this.id = id;
-        this.userChatId = userChatId;
         this.chatId = chatId;
         this.topic = topic;
         this.text = text;
@@ -45,14 +41,6 @@ public class Message {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserChatId() {
-        return userChatId;
-    }
-
-    public void setUserChatId(Long userChatId) {
-        this.userChatId = userChatId;
     }
 
     public Long getChatId() {
@@ -92,19 +80,18 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return Objects.equals(id, message.id) && Objects.equals(userChatId, message.userChatId) && Objects.equals(chatId, message.chatId) && Objects.equals(topic, message.topic) && Objects.equals(text, message.text) && Objects.equals(time, message.time);
+        return Objects.equals(id, message.id) && Objects.equals(chatId, message.chatId) && Objects.equals(topic, message.topic) && Objects.equals(text, message.text) && Objects.equals(time, message.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userChatId, chatId, topic, text, time);
+        return Objects.hash(id, chatId, topic, text, time);
     }
 
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", userChatId=" + userChatId +
                 ", chatId=" + chatId +
                 ", topic='" + topic + '\'' +
                 ", text='" + text + '\'' +

@@ -1,5 +1,9 @@
 package com.github.messenger.config;
 
+import com.github.messenger.service.chat.IChatService;
+import com.github.messenger.service.chat.IUserChatRelationService;
+import com.github.messenger.service.chat.impl.ChatService;
+import com.github.messenger.service.chat.impl.UserChatRelationService;
 import com.github.messenger.service.message.IGlobalMessageService;
 import com.github.messenger.service.message.impl.GlobalMessageService;
 import com.github.messenger.service.user.IUserService;
@@ -12,11 +16,23 @@ public class ServiceConfig {
 
     private static final IGlobalMessageService globalMessageService = new GlobalMessageService(RepositoryConfig.getGlobalMessageRepository());
 
+    private static final IChatService chatService = new ChatService(RepositoryConfig.getChatRepository());
+
+    private static final IUserChatRelationService userChatRelationService = new UserChatRelationService(RepositoryConfig.getUserChatRelationRepository());
+
     public static IUserService getUserService() {
         return userService;
     }
 
     public static IGlobalMessageService getGlobalMessageService() {
         return globalMessageService;
+    }
+
+    public static IChatService getChatService() {
+        return chatService;
+    }
+
+    public static IUserChatRelationService getUserChatRelationService() {
+        return userChatRelationService;
     }
 }
