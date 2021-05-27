@@ -28,7 +28,6 @@ public class PublicTokenProvider {
 
     private static byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
     public static String encode(PublicToken token) {
         if (token == null) {
             throw new BadRequest("Empty token!");
