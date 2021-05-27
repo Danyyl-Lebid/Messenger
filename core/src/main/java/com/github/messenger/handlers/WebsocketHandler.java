@@ -1,6 +1,10 @@
 package com.github.messenger.handlers;
 
+import com.github.messenger.controllers.global.message.IGlobalMessageController;
+import com.github.messenger.controllers.message.IMessageController;
+import com.github.messenger.exceptions.ExpiredToken;
 import com.github.messenger.network.Broker;
+import com.github.messenger.network.RoomConnectionPools;
 import com.github.messenger.network.WebsocketConnectionPool;
 import com.github.messenger.payload.Envelope;
 import com.github.messenger.payload.PrivateToken;
@@ -16,35 +20,55 @@ public class WebsocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(WebsocketHandler.class);
 
-    private final WebsocketConnectionPool websocketConnectionPool;
+    private final WebsocketConnectionPool globalConnectionPool;
+
+    private final RoomConnectionPools roomConnectionPools;
+
+    private final IGlobalMessageController globalMessageController;
+
+    private final IMessageController messageController;
 
     private final Broker broker;
 
-    public WebsocketHandler(WebsocketConnectionPool websocketConnectionPool, Broker broker) {
-        this.websocketConnectionPool = websocketConnectionPool;
+    public WebsocketHandler(
+            WebsocketConnectionPool globalConnectionPool,
+            RoomConnectionPools roomConnectionPools,
+            Broker broker,
+            IGlobalMessageController globalMessageController,
+            IMessageController messageController
+    ) {
+        this.globalConnectionPool = globalConnectionPool;
+        this.roomConnectionPools = roomConnectionPools;
         this.broker = broker;
+        this.globalMessageController = globalMessageController;
+        this.messageController = messageController;
     }
 
     @OnMessage
-    public void messages(Session session, String payload) {
+    public void messages(Session session, String input) {
         try {
-            System.out.println(payload);
-            Envelope envelope = JsonHelper.fromJson(payload, Envelope.class).orElseThrow();
-            PrivateToken result = PrivateTokenProvider.decode(envelope.getPayload());
-            PrivateTokenProvider.validateToken(result);
+            Envelope envelope = JsonHelper.fromJson(input, Envelope.class).orElseThrow();
+            PrivateToken result = PrivateTokenProvider.decode(envelope.getToken());
+            if(!PrivateTokenProvider.validateToken(result)){
+                throw new ExpiredToken();
+            }
             switch (envelope.getTopic()) {
                 case LOGIN:
-                    websocketConnectionPool.addSession(result.getLogin(), session);
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
+                    globalConnectionPool.addSession(result.getUserId(), session);
+                    roomConnectionPools.addSession(result.getUserId(), session);
+                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    break;
+                case GLOBAL_MESSAGE:
+                    globalMessageController.save(result.getUserId(), envelope.getPayload());
+                    globalMessageController.broadcast(envelope.getPayload());
                     break;
                 case MESSAGE:
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
-                    broker.send(session,envelope);
-                    break;
+                    messageController.save(result.getUserId(), envelope.getPayload());
+                    messageController.broadcast(envelope.getPayload());
                 case LOGOUT:
-                    broker.broadcast(websocketConnectionPool.getSessions(), envelope);
-                    websocketConnectionPool.removeSession(result.getLogin());
-                    websocketConnectionPool.getSession(result.getLogin()).close();
+                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    globalConnectionPool.removeSession(result.getUserId());
+                    globalConnectionPool.getSession(result.getUserId()).close();
                     break;
             }
         } catch (Throwable e) {

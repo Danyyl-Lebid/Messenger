@@ -10,6 +10,4 @@ public interface IMessageService {
 
     Collection<Message> findAllByChatId(Long chatId);
 
-    Message findLastByChatId(Long chatId);
-
 }

@@ -7,6 +7,8 @@ import java.util.Objects;
 
 public class PrivateToken {
 
+    private Long userId;
+
     private String login;
 
     private Date createdAt;
@@ -16,16 +18,26 @@ public class PrivateToken {
     public PrivateToken() {
     }
 
-    public PrivateToken(String login, Date createdAt, Date expireIn) {
+    public PrivateToken(Long userId, String login, Date createdAt, Date expireIn) {
+        this.userId = userId;
         this.login = login;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(String login, int lifetimeInMinutes) {
+    public PrivateToken(Long userId, String login, int lifetimeInMinutes) {
+        this.userId = userId;
         this.login = login;
         this.createdAt = DateUtils.getCurrentDate();
         this.expireIn = DateUtils.addMinutes(this.createdAt, lifetimeInMinutes);
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getLogin() {
@@ -57,21 +69,21 @@ public class PrivateToken {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrivateToken that = (PrivateToken) o;
-        return Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
+        return Objects.equals(userId, that.userId) && Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, createdAt, expireIn);
+        return Objects.hash(userId, login, createdAt, expireIn);
     }
 
     @Override
     public String toString() {
         return "PrivateToken{" +
-                "login='" + login + '\'' +
+                "userId=" + userId +
+                ", login='" + login + '\'' +
                 ", createdAt=" + createdAt +
                 ", expireIn=" + expireIn +
                 '}';
     }
-
 }

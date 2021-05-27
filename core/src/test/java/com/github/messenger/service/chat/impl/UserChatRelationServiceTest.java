@@ -18,6 +18,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -134,6 +135,26 @@ public class UserChatRelationServiceTest {
         Collection<UserChatRelation> act = relationRepository.findAll();
         Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
     }
+
+    @Test
+    public void findAllUsersByChatIdOne(){
+        Collection<Long> exp = new ArrayList<>();
+        exp.add(mockRelationArray[0].getUserId());
+        Collection<Long> act = relationService.findAllUsersByChatId(mockChatArray[0].getId());
+        Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
+    }
+
+    @Test
+    public void findAllUsersByChatIdTwo(){
+        UserChatRelation newRelation = new UserChatRelation(null, mockUserArray[1].getId(), mockChatArray[0].getId());
+        relationService.addRelation(newRelation);
+        Collection<Long> exp = new ArrayList<>();
+        exp.add(mockRelationArray[0].getUserId());
+        exp.add(newRelation.getUserId());
+        Collection<Long> act = relationService.findAllUsersByChatId(mockChatArray[0].getId());
+        Assert.assertTrue(collectionsEqualsInAnyOrder(exp, act));
+    }
+
 
     private <T> boolean collectionsEqualsInAnyOrder(Collection<T> first, Collection<T> second) {
         return first.size() == second.size() && first.containsAll(second) && second.containsAll(first);

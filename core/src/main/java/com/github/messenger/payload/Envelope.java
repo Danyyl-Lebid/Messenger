@@ -6,13 +6,16 @@ public class Envelope {
 
     private Topic topic;
 
+    private String token;
+
     private String payload;
 
     public Envelope() {
     }
 
-    public Envelope(Topic topic, String payload) {
+    public Envelope(Topic topic, String token, String payload) {
         this.topic = topic;
+        this.token = token;
         this.payload = payload;
     }
 
@@ -22,6 +25,14 @@ public class Envelope {
 
     public void setTopic(Topic topic) {
         this.topic = topic;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPayload() {
@@ -37,18 +48,19 @@ public class Envelope {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Envelope envelope = (Envelope) o;
-        return topic == envelope.topic && Objects.equals(payload, envelope.payload);
+        return topic == envelope.topic && Objects.equals(token, envelope.token) && Objects.equals(payload, envelope.payload);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(topic, payload);
+        return Objects.hash(topic, token, payload);
     }
 
     @Override
     public String toString() {
         return "Envelope{" +
                 "topic=" + topic +
+                ", token='" + token + '\'' +
                 ", payload='" + payload + '\'' +
                 '}';
     }

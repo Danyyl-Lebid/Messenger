@@ -1,4 +1,4 @@
-package com.github.messenger.dto;
+package com.github.messenger.dto.user;
 
 import com.github.messenger.payload.Role;
 import com.github.messenger.entity.User;
