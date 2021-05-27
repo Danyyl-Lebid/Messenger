@@ -1,7 +1,9 @@
 package com.github.messenger.controllers.authorization;
 
+import java.util.Map;
+
 public interface IAuthorizationController {
 
-    String authorize(String json);
+    Map<String, String> authorize(String json);
 
 }
