@@ -20,7 +20,7 @@ public class WebsocketHandlerConfig {
 
     private static final WebsocketHandler websocketHandler = new WebsocketHandler(
             getWebsocketConnectionPool(),
-            roomConnectionPools,
+            getRoomConnectionPools(),
             getBroker(),
             ControllerConfig.getGlobalMessageController()
     );
@@ -31,6 +31,10 @@ public class WebsocketHandlerConfig {
 
     public static WebsocketConnectionPool getWebsocketConnectionPool() {
         return websocketConnectionPool;
+    }
+
+    public static RoomConnectionPools getRoomConnectionPools() {
+        return roomConnectionPools;
     }
 
     public static Broker getBroker() {

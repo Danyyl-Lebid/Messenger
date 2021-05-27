@@ -50,6 +50,7 @@ public class WebsocketHandler {
             switch (envelope.getTopic()) {
                 case LOGIN:
                     globalConnectionPool.addSession(result.getUserId(), session);
+                    roomConnectionPools.addSession(result.getUserId(), session);
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
                 case GLOBAL_MESSAGE:

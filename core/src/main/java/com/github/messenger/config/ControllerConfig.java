@@ -4,6 +4,8 @@ import com.github.messenger.controllers.authorization.IAuthorizationController;
 import com.github.messenger.controllers.authorization.impl.AuthorizationController;
 import com.github.messenger.controllers.global.message.IGlobalMessageController;
 import com.github.messenger.controllers.global.message.impl.GlobalMessageController;
+import com.github.messenger.controllers.message.IMessageController;
+import com.github.messenger.controllers.message.impl.MessageController;
 import com.github.messenger.controllers.registration.IRegistrationController;
 import com.github.messenger.controllers.registration.impl.RegistrationController;
 
@@ -19,6 +21,12 @@ public class ControllerConfig {
             WebsocketHandlerConfig.getBroker()
     );
 
+    private static IMessageController messageController = new MessageController(
+            ServiceConfig.getMessageService(),
+            WebsocketHandlerConfig.getRoomConnectionPools(),
+            WebsocketHandlerConfig.getBroker()
+    );
+
     public static IAuthorizationController getAuthorizationController() {
         return authorizationController;
     }
@@ -27,6 +35,9 @@ public class ControllerConfig {
         return registrationController;
     }
 
+    public static IMessageController getMessageController() {
+        return messageController;
+    }
 
     public static IGlobalMessageController getGlobalMessageController() {
         return globalMessageController;
