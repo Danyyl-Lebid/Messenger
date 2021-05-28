@@ -42,6 +42,6 @@ public class UserChatRelationService implements IUserChatRelationService {
     @Override
     public List<Long> findAllChatsByUserId(Long userId) {
         Collection<UserChatRelation> chatOfUser = userChatRelationRepository.findAllBy("userId", Long.class, userId);
-        return chatOfUser.stream().map(UserChatRelation::getUserId).collect(Collectors.toList());
+        return chatOfUser.stream().map(UserChatRelation::getChatId).collect(Collectors.toList());
     }
 }
