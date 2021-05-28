@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpHandler extends HttpServlet {
@@ -17,6 +18,10 @@ public class HttpHandler extends HttpServlet {
     private final IAuthorizationController authorizationController;
 
     private final IRegistrationController registrationController;
+
+    private static final String NICKNAME = "Nickname";
+
+    private static final String TOKEN = "Token";
 
     public HttpHandler(IAuthorizationController authorizationController, IRegistrationController registrationController) {
         this.authorizationController = authorizationController;
@@ -42,11 +47,11 @@ public class HttpHandler extends HttpServlet {
             case "/users/auth":
                 try (ServletOutputStream out = resp.getOutputStream()) {
                     String body = req.getReader().lines().collect(Collectors.joining());
-                    String result = this.authorizationController.authorize(body);
+                    Map<String, String> result = this.authorizationController.authorize(body);
+                    resp.setHeader(NICKNAME, result.get(NICKNAME));
                     resp.setContentType("application/json");
                     resp.setStatus(HttpServletResponse.SC_OK);
-                    resp.setStatus(200);
-                    out.write(result.getBytes());
+                    out.write(result.get(TOKEN).getBytes());
                 } catch (IOException e) {
                     resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
