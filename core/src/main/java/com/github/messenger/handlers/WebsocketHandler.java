@@ -45,9 +45,9 @@ public class WebsocketHandler {
     }
 
     @OnMessage
-    public void messages(Session session, String input) {
+    public void messages(Session session, String payload) {
         try {
-            Envelope envelope = JsonHelper.fromJson(input, Envelope.class).orElseThrow();
+            Envelope envelope = JsonHelper.fromJson(payload, Envelope.class).orElseThrow();
             PrivateToken result = PrivateTokenProvider.decode(envelope.getToken());
             if(!PrivateTokenProvider.validateToken(result)){
                 throw new ExpiredToken();
@@ -76,4 +76,5 @@ public class WebsocketHandler {
             log.warn("Enter {}", e.getMessage());
         }
     }
+
 }
