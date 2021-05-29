@@ -1,5 +1,6 @@
 package com.github.messenger.dto.message;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class GlobalMessageDto {
@@ -8,12 +9,12 @@ public class GlobalMessageDto {
 
     private String text;
 
-    private Long time;
+    private Date time;
 
     public GlobalMessageDto() {
     }
 
-    public GlobalMessageDto(String nickname, String text, Long time) {
+    public GlobalMessageDto(String nickname, String text, Date time) {
         this.nickname = nickname;
         this.text = text;
         this.time = time;
@@ -35,11 +36,11 @@ public class GlobalMessageDto {
         this.text = text;
     }
 
-    public Long getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Long time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

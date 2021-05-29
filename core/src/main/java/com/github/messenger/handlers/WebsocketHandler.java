@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import java.util.Objects;
 
 public class WebsocketHandler {
 
@@ -59,8 +61,11 @@ public class WebsocketHandler {
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
                 case GLOBAL_MESSAGE:
-                    globalMessageController.save(result.getUserId(), envelope.getPayload());
-                    globalMessageController.broadcast(envelope.getPayload());
+                    if(Objects.isNull(this.globalMessageController)){
+                        System.out.println("Is null in websocket handler");
+                    }
+                    this.globalMessageController.save(result.getUserId(), envelope.getPayload());
+                    this.globalMessageController.broadcast(envelope.getPayload());
                     break;
                 case MESSAGE:
                     messageController.save(result.getUserId(), envelope.getPayload());
@@ -76,5 +81,4 @@ public class WebsocketHandler {
             log.warn("Enter {}", e.getMessage());
         }
     }
-
 }

@@ -5,9 +5,9 @@ import com.github.messenger.handlers.HttpHandler;
 
 public class HttpHandlerConfig {
 
-    private static ExceptionHandler exceptionHandler = new ExceptionHandler();
+    private static final ExceptionHandler exceptionHandler = new ExceptionHandler();
 
-    private static HttpHandler httpHandler = new HttpHandler(
+    private static final HttpHandler httpHandler = new HttpHandler(
             ControllerConfig.getAuthorizationController(),
             ControllerConfig.getRegistrationController(),
             exceptionHandler
