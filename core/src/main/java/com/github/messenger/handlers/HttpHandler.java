@@ -1,6 +1,7 @@
 package com.github.messenger.handlers;
 
 import com.github.messenger.controllers.authorization.IAuthorizationController;
+import com.github.messenger.controllers.chat.IChatController;
 import com.github.messenger.controllers.registration.IRegistrationController;
 import com.github.messenger.exceptions.BadRequest;
 
@@ -19,16 +20,25 @@ public class HttpHandler extends HttpServlet {
 
     private final IRegistrationController registrationController;
 
+    private final IChatController chatController;
+
     private final ExceptionHandler exceptionHandler;
 
     private static final String NICKNAME = "Nickname";
 
     private static final String TOKEN = "Token";
 
-    public HttpHandler(IAuthorizationController authorizationController, IRegistrationController registrationController, ExceptionHandler exceptionHandler) {
+    public HttpHandler(
+            IAuthorizationController authorizationController,
+            IRegistrationController registrationController,
+            IChatController chatController,
+            ExceptionHandler exceptionHandler
+    ) {
         this.authorizationController = authorizationController;
         this.registrationController = registrationController;
+        this.chatController = chatController;
         this.exceptionHandler = exceptionHandler;
+
     }
 
     @Override
@@ -41,12 +51,27 @@ public class HttpHandler extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String url = req.getRequestURI();
         String body;
         switch (url) {
-            case "/messenger/auth":
+            case "/messenger/nicknames":
                 ServletOutputStream out = resp.getOutputStream();
+                out.write(this.chatController.getAllUsers().getBytes());
+                break;
+            default:
+                resp.setStatus(404);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String url = req.getRequestURI();
+        String body;
+        String respBody;
+        ServletOutputStream out = resp.getOutputStream();
+        switch (url) {
+            case "/messenger/auth":
                 body = req.getReader().lines().collect(Collectors.joining());
                 Map<String, String> result = this.authorizationController.authorize(body);
                 resp.setHeader(NICKNAME, result.get(NICKNAME));
@@ -59,6 +84,16 @@ public class HttpHandler extends HttpServlet {
                 this.registrationController.register(body);
                 resp.setStatus(HttpServletResponse.SC_OK);
                 break;
+            case "/messenger/create-chat":
+                body = req.getReader().lines().collect(Collectors.joining());
+                this.chatController.createChat(body);
+                resp.setStatus(HttpServletResponse.SC_OK);
+                break;
+            case "/messenger/participants":
+                body = req.getReader().lines().collect(Collectors.joining());
+                respBody = this.chatController.getParticipants(body);
+                resp.setStatus(HttpServletResponse.SC_OK);
+                out.write(respBody.getBytes());
             default:
                 resp.setStatus(404);
         }

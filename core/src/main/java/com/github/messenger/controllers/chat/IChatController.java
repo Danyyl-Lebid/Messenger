@@ -1,13 +1,11 @@
 package com.github.messenger.controllers.chat;
 
-import java.util.Collection;
-
 public interface IChatController {
 
     String getAllUsers();
 
-    void createChat(Collection<String> nicknames, String chatName);
+    void createChat(String json);
 
-    String getParticipants(Long chatId);
+    String getParticipants(String json);
 
 }

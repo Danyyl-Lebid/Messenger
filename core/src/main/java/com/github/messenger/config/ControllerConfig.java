@@ -2,6 +2,8 @@ package com.github.messenger.config;
 
 import com.github.messenger.controllers.authorization.IAuthorizationController;
 import com.github.messenger.controllers.authorization.impl.AuthorizationController;
+import com.github.messenger.controllers.chat.IChatController;
+import com.github.messenger.controllers.chat.impl.ChatController;
 import com.github.messenger.controllers.global.message.IGlobalMessageController;
 import com.github.messenger.controllers.global.message.impl.GlobalMessageController;
 import com.github.messenger.controllers.message.IMessageController;
@@ -18,6 +20,8 @@ public class ControllerConfig {
     private static final IRegistrationController registrationController = new RegistrationController(ServiceConfig.getUserService());
 
     private static IGlobalMessageController globalMessageController;
+
+    private static IChatController chatController;
 
     private static final IMessageController messageController = new MessageController(
             ServiceConfig.getMessageService(),
@@ -46,6 +50,17 @@ public class ControllerConfig {
             );
         }
         return globalMessageController;
+    }
+
+    public static IChatController getChatController() {
+        if(Objects.isNull(chatController)){
+            chatController = new ChatController(
+                    ServiceConfig.getUserService(),
+                    ServiceConfig.getChatService(),
+                    ServiceConfig.getUserChatRelationService()
+            );
+        }
+        return chatController;
     }
 
 }
