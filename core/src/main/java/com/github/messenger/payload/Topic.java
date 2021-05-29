@@ -9,5 +9,6 @@ public enum Topic {
     GLOBAL_HISTORY,
     CREATE_CHAT,
     NICKNAMES,
-    PARTICIPANTS
+    PARTICIPANTS,
+    CHATS
 }

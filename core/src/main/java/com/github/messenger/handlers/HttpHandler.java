@@ -20,8 +20,6 @@ public class HttpHandler extends HttpServlet {
 
     private final IRegistrationController registrationController;
 
-    private final IChatController chatController;
-
     private final ExceptionHandler exceptionHandler;
 
     private static final String NICKNAME = "Nickname";
@@ -31,12 +29,10 @@ public class HttpHandler extends HttpServlet {
     public HttpHandler(
             IAuthorizationController authorizationController,
             IRegistrationController registrationController,
-            IChatController chatController,
             ExceptionHandler exceptionHandler
     ) {
         this.authorizationController = authorizationController;
         this.registrationController = registrationController;
-        this.chatController = chatController;
         this.exceptionHandler = exceptionHandler;
 
     }
@@ -47,20 +43,6 @@ public class HttpHandler extends HttpServlet {
             super.service(req, resp);
         } catch (Throwable e) {
             exceptionHandler.handle(resp, e);
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String url = req.getRequestURI();
-        String body;
-        switch (url) {
-            case "/messenger/nicknames":
-                ServletOutputStream out = resp.getOutputStream();
-                out.write(this.chatController.getAllUsers().getBytes());
-                break;
-            default:
-                resp.setStatus(404);
         }
     }
 
@@ -84,16 +66,6 @@ public class HttpHandler extends HttpServlet {
                 this.registrationController.register(body);
                 resp.setStatus(HttpServletResponse.SC_OK);
                 break;
-            case "/messenger/create-chat":
-                body = req.getReader().lines().collect(Collectors.joining());
-                this.chatController.createChat(body);
-                resp.setStatus(HttpServletResponse.SC_OK);
-                break;
-            case "/messenger/participants":
-                body = req.getReader().lines().collect(Collectors.joining());
-                respBody = this.chatController.getParticipants(body);
-                resp.setStatus(HttpServletResponse.SC_OK);
-                out.write(respBody.getBytes());
             default:
                 resp.setStatus(404);
         }

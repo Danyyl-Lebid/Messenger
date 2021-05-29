@@ -94,6 +94,21 @@ public class WebsocketHandler {
                 case GLOBAL_HISTORY:
                     globalMessageController.sendHistory(session);
                     break;
+                case CREATE_CHAT:
+                    chatController.createChat(envelope.getPayload());
+                    break;
+                case NICKNAMES:
+                    resultString = chatController.getAllUsers();
+                    broker.send(session, resultString);
+                    break;
+                case PARTICIPANTS:
+                    resultString = chatController.getParticipants(envelope.getPayload());
+                    broker.send(session, resultString);
+                    break;
+                case CHATS:
+                    resultString = chatController.getChats(result.getUserId());
+                    broker.send(session, resultString);
+                    break;
                 case LOGOUT:
                     globalConnectionPool.removeSession(result.getUserId());
                     roomConnectionPools.removeSession(result.getUserId());

@@ -8,4 +8,6 @@ public interface IChatController {
 
     String getParticipants(String json);
 
+    String getChats(Long userId);
+
 }

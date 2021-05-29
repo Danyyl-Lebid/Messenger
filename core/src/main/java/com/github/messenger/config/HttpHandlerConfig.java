@@ -10,7 +10,6 @@ public class HttpHandlerConfig {
     private static final HttpHandler httpHandler = new HttpHandler(
             ControllerConfig.getAuthorizationController(),
             ControllerConfig.getRegistrationController(),
-            ControllerConfig.getChatController(),
             exceptionHandler
     );
 
