@@ -15,6 +15,9 @@ public class GlobalMessage {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column(name = "text")
     private String text;
 
@@ -24,9 +27,10 @@ public class GlobalMessage {
     public GlobalMessage() {
     }
 
-    public GlobalMessage(Long id, Long userId, String text, Long time) {
+    public GlobalMessage(Long id, Long userId, String nickname, String text, Long time) {
         this.id = id;
         this.userId = userId;
+        this.nickname = nickname;
         this.text = text;
         this.time = time;
     }
@@ -45,6 +49,14 @@ public class GlobalMessage {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getText() {
@@ -68,12 +80,12 @@ public class GlobalMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GlobalMessage that = (GlobalMessage) o;
-        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(text, that.text) && Objects.equals(time, that.time);
+        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(nickname, that.nickname) && Objects.equals(text, that.text) && Objects.equals(time, that.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, text, time);
+        return Objects.hash(id, userId, nickname, text, time);
     }
 
     @Override
@@ -81,6 +93,7 @@ public class GlobalMessage {
         return "GlobalMessage{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", nickname='" + nickname + '\'' +
                 ", text='" + text + '\'' +
                 ", time=" + time +
                 '}';

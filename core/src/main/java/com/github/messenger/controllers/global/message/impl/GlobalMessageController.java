@@ -41,8 +41,9 @@ public class GlobalMessageController implements IGlobalMessageController {
         GlobalMessage globalMessage = new GlobalMessage(
                 null,
                 userId,
+                dto.getNickname(),
                 dto.getText(),
-                dto.getTime()
+                dto.getTime().getTime()
         );
         globalMessageService.save(globalMessage);
     }
