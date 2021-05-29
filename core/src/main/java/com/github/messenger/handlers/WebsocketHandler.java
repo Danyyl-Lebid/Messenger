@@ -2,6 +2,7 @@ package com.github.messenger.handlers;
 
 import com.github.messenger.controllers.global.message.IGlobalMessageController;
 import com.github.messenger.controllers.message.IMessageController;
+import com.github.messenger.dto.HistoryRequestDto;
 import com.github.messenger.exceptions.ExpiredToken;
 import com.github.messenger.network.Broker;
 import com.github.messenger.network.RoomConnectionPools;
@@ -71,14 +72,20 @@ public class WebsocketHandler {
                 case MESSAGE:
                     messageController.save(result.getUserId(), envelope.getPayload());
                     messageController.broadcast(envelope.getPayload());
+                    break;
+                case CHAT_HISTORY:
+                    HistoryRequestDto historyRequestDto = JsonHelper.fromJson(envelope.getPayload(), HistoryRequestDto.class).orElseThrow();
+                    messageController.sendHistory(session, historyRequestDto.getChatId());
+                    break;
+                case GLOBAL_HISTORY:
+                    globalMessageController.sendHistory(session);
                 case LOGOUT:
-                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     globalConnectionPool.removeSession(result.getUserId());
-                    globalConnectionPool.getSession(result.getUserId()).close();
+                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
             }
         } catch (Throwable e) {
-            //TODO: single send to user about error
+            broker.send(session, String.format("Error %s has occurred on server", e.getClass().getName()));
             log.warn("Enter {}", e.getMessage());
         }
     }

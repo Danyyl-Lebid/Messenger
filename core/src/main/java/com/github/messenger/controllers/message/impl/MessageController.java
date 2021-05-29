@@ -10,6 +10,8 @@ import com.github.messenger.service.message.IMessageService;
 import com.github.messenger.utils.JsonHelper;
 
 import javax.websocket.Session;
+import java.util.Collection;
+import java.util.Date;
 
 public class MessageController implements IMessageController {
 
@@ -26,8 +28,18 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public void sendHistory(Session session) {
-
+    public void sendHistory(Session session, Long chatId) {
+        Collection<Message> messages = messageService.findAllByChatId(chatId);
+        for(Message message : messages){
+            MessageDto dto = new MessageDto(
+                    message.getChatId(),
+                    message.getNickname(),
+                    message.getText(),
+                    new Date(message.getTime())
+            );
+            String payload = JsonHelper.toJson(dto).orElseThrow();
+            broker.send(session, payload);
+        }
     }
 
     @Override
@@ -45,7 +57,7 @@ public class MessageController implements IMessageController {
                 dto.getChatId(),
                 dto.getNickname(),
                 dto.getText(),
-                dto.getTime()
+                dto.getTime().getTime()
         );
         messageService.save(message);
     }

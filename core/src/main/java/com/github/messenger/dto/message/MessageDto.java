@@ -1,5 +1,6 @@
 package com.github.messenger.dto.message;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class MessageDto {
@@ -10,12 +11,12 @@ public class MessageDto {
 
     private String text;
 
-    private Long time;
+    private Date time;
 
     public MessageDto() {
     }
 
-    public MessageDto(Long chatId, String nickname, String text, Long time) {
+    public MessageDto(Long chatId, String nickname, String text, Date time) {
         this.chatId = chatId;
         this.nickname = nickname;
         this.text = text;
@@ -46,11 +47,11 @@ public class MessageDto {
         this.text = text;
     }
 
-    public Long getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Long time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

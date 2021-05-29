@@ -4,7 +4,7 @@ import javax.websocket.Session;
 
 public interface IMessageController {
 
-    void sendHistory(Session session);
+    void sendHistory(Session session, Long chatId);
 
     void broadcast(String payload);
 
