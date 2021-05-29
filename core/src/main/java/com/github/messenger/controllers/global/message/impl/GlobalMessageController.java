@@ -6,6 +6,8 @@ import com.github.messenger.entity.GlobalMessage;
 import com.github.messenger.exceptions.IncorrectPayload;
 import com.github.messenger.network.Broker;
 import com.github.messenger.network.WebsocketConnectionPool;
+import com.github.messenger.payload.Envelope;
+import com.github.messenger.payload.Topic;
 import com.github.messenger.service.message.IGlobalMessageService;
 import com.github.messenger.utils.JsonHelper;
 
@@ -37,7 +39,8 @@ public class GlobalMessageController implements IGlobalMessageController {
                     new Date(message.getTime())
             );
             String payload = JsonHelper.toJson(dto).orElseThrow();
-            broker.send(session, payload);
+            Envelope envelope =  new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
+            broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
         }
     }
 

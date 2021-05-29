@@ -1,5 +1,6 @@
 package com.github.messenger.handlers;
 
+import com.github.messenger.controllers.chat.IChatController;
 import com.github.messenger.controllers.global.message.IGlobalMessageController;
 import com.github.messenger.controllers.message.IMessageController;
 import com.github.messenger.controllers.status.IStatusController;
@@ -33,6 +34,8 @@ public class WebsocketHandler {
 
     private final IStatusController statusController;
 
+    private final IChatController chatController;
+
     private final Broker broker;
 
     public WebsocketHandler(
@@ -41,7 +44,8 @@ public class WebsocketHandler {
             Broker broker,
             IGlobalMessageController globalMessageController,
             IMessageController messageController,
-            IStatusController statusController
+            IStatusController statusController,
+            IChatController chatController
     ) {
         this.globalConnectionPool = globalConnectionPool;
         this.roomConnectionPools = roomConnectionPools;
@@ -49,6 +53,7 @@ public class WebsocketHandler {
         this.globalMessageController = globalMessageController;
         this.messageController = messageController;
         this.statusController = statusController;
+        this.chatController = chatController;
     }
 
     @OnMessage
@@ -59,24 +64,28 @@ public class WebsocketHandler {
             if (!PrivateTokenProvider.validateToken(result)) {
                 throw new ExpiredToken();
             }
+            envelope.setToken("empty-token");
+            String resultString;
             switch (envelope.getTopic()) {
                 case LOGIN:
                     globalConnectionPool.addSession(result.getUserId(), session);
                     roomConnectionPools.addSession(result.getUserId(), session);
-                    globalMessageController.sendHistory(session);
                     statusController.setOnline(result.getUserId());
-                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    resultString = JsonHelper.toJson(envelope).orElseThrow();
+                    broker.broadcast(globalConnectionPool.getSessions(), resultString);
                     break;
                 case GLOBAL_MESSAGE:
                     if (Objects.isNull(this.globalMessageController)) {
                         System.out.println("Is null in websocket handler");
                     }
                     this.globalMessageController.save(result.getUserId(), envelope.getPayload());
-                    this.globalMessageController.broadcast(envelope.getPayload());
+                    resultString = JsonHelper.toJson(envelope).orElseThrow();
+                    this.globalMessageController.broadcast(resultString);
                     break;
                 case MESSAGE:
                     messageController.save(result.getUserId(), envelope.getPayload());
-                    messageController.broadcast(envelope.getPayload());
+                    resultString = JsonHelper.toJson(envelope).orElseThrow();
+                    messageController.broadcast(resultString);
                     break;
                 case CHAT_HISTORY:
                     HistoryRequestDto historyRequestDto = JsonHelper.fromJson(envelope.getPayload(), HistoryRequestDto.class).orElseThrow();
@@ -89,7 +98,8 @@ public class WebsocketHandler {
                     globalConnectionPool.removeSession(result.getUserId());
                     roomConnectionPools.removeSession(result.getUserId());
                     statusController.setOffline(result.getUserId());
-                    broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    resultString = JsonHelper.toJson(envelope).orElseThrow();
+                    broker.broadcast(globalConnectionPool.getSessions(), resultString);
                     break;
             }
         } catch (Throwable e) {

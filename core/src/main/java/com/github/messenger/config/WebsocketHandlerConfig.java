@@ -24,7 +24,8 @@ public class WebsocketHandlerConfig {
             getBroker(),
             ControllerConfig.getGlobalMessageController(),
             ControllerConfig.getMessageController(),
-            ControllerConfig.getStatusController()
+            ControllerConfig.getStatusController(),
+            ControllerConfig.getChatController()
     );
 
     public static WebsocketHandler getWebsocketHandler() {

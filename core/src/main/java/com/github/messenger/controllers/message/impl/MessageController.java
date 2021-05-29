@@ -6,6 +6,8 @@ import com.github.messenger.entity.Message;
 import com.github.messenger.exceptions.IncorrectPayload;
 import com.github.messenger.network.Broker;
 import com.github.messenger.network.RoomConnectionPools;
+import com.github.messenger.payload.Envelope;
+import com.github.messenger.payload.Topic;
 import com.github.messenger.service.message.IMessageService;
 import com.github.messenger.utils.JsonHelper;
 
@@ -38,7 +40,8 @@ public class MessageController implements IMessageController {
                     new Date(message.getTime())
             );
             String payload = JsonHelper.toJson(dto).orElseThrow();
-            broker.send(session, payload);
+            Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
+            broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
         }
     }
 
