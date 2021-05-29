@@ -10,6 +10,8 @@ import com.github.messenger.controllers.message.IMessageController;
 import com.github.messenger.controllers.message.impl.MessageController;
 import com.github.messenger.controllers.registration.IRegistrationController;
 import com.github.messenger.controllers.registration.impl.RegistrationController;
+import com.github.messenger.controllers.status.IStatusController;
+import com.github.messenger.controllers.status.impl.StatusController;
 
 import java.util.Objects;
 
@@ -28,6 +30,8 @@ public class ControllerConfig {
             WebsocketHandlerConfig.getRoomConnectionPools(),
             WebsocketHandlerConfig.getBroker()
     );
+
+    private static IStatusController statusController;
 
     public static IAuthorizationController getAuthorizationController() {
         return authorizationController;
@@ -63,4 +67,12 @@ public class ControllerConfig {
         return chatController;
     }
 
+    public static IStatusController getStatusController() {
+        if(Objects.isNull(statusController)){
+            statusController = new StatusController(
+                    ServiceConfig.getUserService()
+            );
+        }
+        return statusController;
+    }
 }

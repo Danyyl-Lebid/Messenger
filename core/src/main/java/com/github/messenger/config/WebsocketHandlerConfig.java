@@ -23,7 +23,8 @@ public class WebsocketHandlerConfig {
             getRoomConnectionPools(),
             getBroker(),
             ControllerConfig.getGlobalMessageController(),
-            ControllerConfig.getMessageController()
+            ControllerConfig.getMessageController(),
+            ControllerConfig.getStatusController()
     );
 
     public static WebsocketHandler getWebsocketHandler() {
