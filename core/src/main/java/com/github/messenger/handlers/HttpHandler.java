@@ -48,7 +48,7 @@ public class HttpHandler extends HttpServlet {
         String url = req.getRequestURI();
         String body;
         switch (url) {
-            case "/users/auth":
+            case "/messenger/auth":
                 ServletOutputStream out = resp.getOutputStream();
                 body = req.getReader().lines().collect(Collectors.joining());
                 Map<String, String> result = this.authorizationController.authorize(body);
@@ -57,7 +57,7 @@ public class HttpHandler extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_OK);
                 out.write(result.get(TOKEN).getBytes());
                 break;
-            case "/users/reg":
+            case "/messenger/reg":
                 body = req.getReader().lines().collect(Collectors.joining());
                 this.registrationController.register(body);
                 resp.setStatus(HttpServletResponse.SC_OK);
