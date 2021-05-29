@@ -5,9 +5,6 @@ import com.github.messenger.network.Broker;
 import com.github.messenger.network.RoomConnectionPools;
 import com.github.messenger.network.WebsocketConnectionPool;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class WebsocketHandlerConfig {
 
     private static final WebsocketConnectionPool websocketConnectionPool = new WebsocketConnectionPool();

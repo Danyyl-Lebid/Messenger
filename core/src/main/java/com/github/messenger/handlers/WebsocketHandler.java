@@ -45,10 +45,12 @@ public class WebsocketHandler {
     }
 
     @OnMessage
-    public void messages(Session session, String input) {
+    public void messages(Session session, String payload) {
         try {
-            Envelope envelope = JsonHelper.fromJson(input, Envelope.class).orElseThrow();
+            log.info(payload);
+            Envelope envelope = JsonHelper.fromJson(payload, Envelope.class).orElseThrow();
             PrivateToken result = PrivateTokenProvider.decode(envelope.getToken());
+            log.info(payload);
             if(!PrivateTokenProvider.validateToken(result)){
                 throw new ExpiredToken();
             }

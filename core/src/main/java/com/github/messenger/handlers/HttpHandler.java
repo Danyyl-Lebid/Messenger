@@ -2,7 +2,6 @@ package com.github.messenger.handlers;
 
 import com.github.messenger.controllers.authorization.IAuthorizationController;
 import com.github.messenger.controllers.registration.IRegistrationController;
-import com.github.messenger.exceptions.BadRequest;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
