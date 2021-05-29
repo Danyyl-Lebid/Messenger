@@ -58,6 +58,7 @@ public class WebsocketHandler {
                 case LOGIN:
                     globalConnectionPool.addSession(result.getUserId(), session);
                     roomConnectionPools.addSession(result.getUserId(), session);
+                    globalMessageController.sendHistory(session);
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
                 case GLOBAL_MESSAGE:
