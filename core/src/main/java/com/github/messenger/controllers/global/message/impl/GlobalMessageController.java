@@ -21,7 +21,11 @@ public class GlobalMessageController implements IGlobalMessageController {
 
     private final Broker broker;
 
-    public GlobalMessageController(IGlobalMessageService globalMessageService, WebsocketConnectionPool connectionPool, Broker broker) {
+    public GlobalMessageController(
+            IGlobalMessageService globalMessageService,
+            WebsocketConnectionPool connectionPool,
+            Broker broker
+    ) {
         this.globalMessageService = globalMessageService;
         this.connectionPool = connectionPool;
         this.broker = broker;
@@ -30,7 +34,7 @@ public class GlobalMessageController implements IGlobalMessageController {
     @Override
     public void sendHistory(Session session) {
         Collection<GlobalMessage> messages = globalMessageService.getMessages();
-        for(GlobalMessage message : messages){
+        for (GlobalMessage message : messages) {
             GlobalMessageDto dto = new GlobalMessageDto(
                     message.getNickname(),
                     message.getText(),
