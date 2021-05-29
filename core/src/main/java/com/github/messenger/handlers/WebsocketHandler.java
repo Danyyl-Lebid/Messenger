@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import java.util.Objects;
 
@@ -79,8 +78,10 @@ public class WebsocketHandler {
                     break;
                 case GLOBAL_HISTORY:
                     globalMessageController.sendHistory(session);
+                    break;
                 case LOGOUT:
                     globalConnectionPool.removeSession(result.getUserId());
+                    roomConnectionPools.removeSession(result.getUserId());
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
                     break;
             }

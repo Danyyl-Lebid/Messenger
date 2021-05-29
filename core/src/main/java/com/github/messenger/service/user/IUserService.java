@@ -16,7 +16,7 @@ public interface IUserService {
 
     User findByNickname(String nickname);
 
-    User insert(User user);
+    void insert(User user);
 
     void update(User user);
 

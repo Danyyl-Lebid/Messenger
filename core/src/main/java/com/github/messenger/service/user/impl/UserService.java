@@ -5,7 +5,6 @@ import com.github.messenger.exceptions.Conflict;
 import com.github.messenger.exceptions.UpdateError;
 import com.github.messenger.repository.IRepository;
 import com.github.messenger.service.user.IUserService;
-import org.hibernate.TransientObjectException;
 import org.hibernate.exception.ConstraintViolationException;
 
 import javax.persistence.PersistenceException;
@@ -45,13 +44,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User insert(User user) {
+    public void insert(User user) {
         try {
             this.userRepository.save(user);
         } catch (ConstraintViolationException e){
             throw new Conflict();
         }
-        return user;
     }
 
     @Override
