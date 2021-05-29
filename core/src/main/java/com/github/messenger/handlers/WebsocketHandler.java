@@ -59,6 +59,7 @@ public class WebsocketHandler {
                     globalConnectionPool.addSession(result.getUserId(), session);
                     roomConnectionPools.addSession(result.getUserId(), session);
                     broker.broadcast(globalConnectionPool.getSessions(), envelope.getPayload());
+                    globalMessageController.sendHistory(session);
                     break;
                 case GLOBAL_MESSAGE:
                     if(Objects.isNull(this.globalMessageController)){

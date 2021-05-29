@@ -10,6 +10,8 @@ import com.github.messenger.service.message.IGlobalMessageService;
 import com.github.messenger.utils.JsonHelper;
 
 import javax.websocket.Session;
+import java.util.Collection;
+import java.util.Date;
 
 public class GlobalMessageController implements IGlobalMessageController {
 
@@ -27,7 +29,16 @@ public class GlobalMessageController implements IGlobalMessageController {
 
     @Override
     public void sendHistory(Session session) {
-
+        Collection<GlobalMessage> messages = globalMessageService.getMessages();
+        for(GlobalMessage message : messages){
+            GlobalMessageDto dto = new GlobalMessageDto(
+                    message.getNickname(),
+                    message.getText(),
+                    new Date(message.getTime())
+            );
+            String payload = JsonHelper.toJson(dto).orElseThrow();
+            broker.send(session, payload);
+        }
     }
 
     @Override

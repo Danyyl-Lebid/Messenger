@@ -24,7 +24,7 @@ public class ServerConfig {
         tomcat.setPort(Integer.parseInt(webPort));
         Context ctx = tomcat.addWebapp("/", new File(".").getAbsolutePath());
         tomcat.addServlet("", HttpHandlerConfig.getHttpHandler().getClass().getName(), HttpHandlerConfig.getHttpHandler());
-        ctx.addServletMappingDecoded("/users/*", HttpHandlerConfig.getHttpHandler().getClass().getName());
+        ctx.addServletMappingDecoded("/messenger/*", HttpHandlerConfig.getHttpHandler().getClass().getName());
         return new ServerRunner(tomcat, ctx, List.of(chatWebsocketHandler));
     }
 
