@@ -14,6 +14,7 @@ import com.github.messenger.utils.JsonHelper;
 import javax.websocket.Session;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GlobalMessageController implements IGlobalMessageController {
 
@@ -32,7 +33,8 @@ public class GlobalMessageController implements IGlobalMessageController {
     @Override
     public void sendHistory(Session session) {
         Collection<GlobalMessage> messages = globalMessageService.getMessages();
-        synchronized (session) {
+        AtomicBoolean free = new AtomicBoolean(true);
+        synchronized (free) {
             messages.forEach(message -> {
                 GlobalMessageDto dto = new GlobalMessageDto(
                         message.getNickname(),
@@ -42,7 +44,11 @@ public class GlobalMessageController implements IGlobalMessageController {
                 String payload = JsonHelper.toJson(dto).orElseThrow();
                 Envelope envelope = new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
                 String resultString = JsonHelper.toJson(envelope).orElseThrow();
-                broker.sendBasic(session, resultString);
+                if(free.get()) {
+                    free.set(false);
+                    broker.sendAsync(session, resultString);
+                    free.set(true);
+                }
             });
         }
     }

@@ -14,6 +14,7 @@ import com.github.messenger.utils.JsonHelper;
 import javax.websocket.Session;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MessageController implements IMessageController {
 
@@ -32,7 +33,8 @@ public class MessageController implements IMessageController {
     @Override
     public void sendHistory(Session session, Long chatId) {
         Collection<Message> messages = messageService.findAllByChatId(chatId);
-        synchronized (session) {
+        AtomicBoolean free = new AtomicBoolean(true);
+        synchronized (free) {
             messages.forEach(message -> {
                 MessageDto dto = new MessageDto(
                         message.getChatId(),
@@ -42,7 +44,11 @@ public class MessageController implements IMessageController {
                 );
                 String payload = JsonHelper.toJson(dto).orElseThrow();
                 Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
-                broker.sendBasic(session, JsonHelper.toJson(envelope).orElseThrow());
+                if(free.get()) {
+                    free.set(false);
+                    broker.sendAsync(session, JsonHelper.toJson(envelope).orElseThrow());
+                    free.set(true);
+                }
             });
         }
     }
