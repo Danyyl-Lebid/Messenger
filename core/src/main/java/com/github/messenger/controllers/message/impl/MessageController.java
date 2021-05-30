@@ -44,11 +44,10 @@ public class MessageController implements IMessageController {
                 );
                 String payload = JsonHelper.toJson(dto).orElseThrow();
                 Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
-                if(free.get()) {
-                    free.set(false);
-                    broker.sendAsync(session, JsonHelper.toJson(envelope).orElseThrow());
-                    free.set(true);
-                }
+                while (!free.get()) ;
+                free.set(false);
+                broker.sendAsync(session, JsonHelper.toJson(envelope).orElseThrow());
+                free.set(true);
             });
         }
     }
