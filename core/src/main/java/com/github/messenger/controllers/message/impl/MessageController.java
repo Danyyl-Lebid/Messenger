@@ -33,7 +33,7 @@ public class MessageController implements IMessageController {
     public void sendHistory(Session session, Long chatId) {
         Collection<Message> messages = messageService.findAllByChatId(chatId);
         synchronized (session) {
-            messages.stream().forEach(message -> {
+            messages.forEach(message -> {
                 MessageDto dto = new MessageDto(
                         message.getChatId(),
                         message.getNickname(),
@@ -42,7 +42,7 @@ public class MessageController implements IMessageController {
                 );
                 String payload = JsonHelper.toJson(dto).orElseThrow();
                 Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
-                broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
+                broker.sendBasic(session, JsonHelper.toJson(envelope).orElseThrow());
             });
         }
     }

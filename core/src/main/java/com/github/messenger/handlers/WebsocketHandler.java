@@ -97,15 +97,15 @@ public class WebsocketHandler {
                     break;
                 case NICKNAMES:
                     resultString = chatController.getAllUsers();
-                    broker.send(session, resultString);
+                    broker.sendAsync(session, resultString);
                     break;
                 case PARTICIPANTS:
                     resultString = chatController.getParticipants(envelope.getPayload());
-                    broker.send(session, resultString);
+                    broker.sendAsync(session, resultString);
                     break;
                 case CHATS:
                     resultString = chatController.getChats(result.getUserId());
-                    broker.send(session, resultString);
+                    broker.sendAsync(session, resultString);
                     break;
                 case LOGOUT:
                     globalConnectionPool.removeSession(result.getUserId());
@@ -116,7 +116,7 @@ public class WebsocketHandler {
                     break;
             }
         } catch (Throwable e) {
-            broker.send(session, String.format("Error %s has occurred on server", e.getClass().getName()));
+            broker.sendAsync(session, String.format("Error %s has occurred on server", e.getClass().getName()));
             log.warn(String.format("Exception %s - Message: %s", e.getClass().getName(), e.getMessage()));
         }
     }
