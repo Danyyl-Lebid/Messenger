@@ -32,7 +32,7 @@ public class GlobalMessageController implements IGlobalMessageController {
     @Override
     public void sendHistory(Session session) {
         Collection<GlobalMessage> messages = globalMessageService.getMessages();
-        for(GlobalMessage message : messages){
+        messages.stream().forEach(message -> {
             GlobalMessageDto dto = new GlobalMessageDto(
                     message.getNickname(),
                     message.getText(),
@@ -42,7 +42,7 @@ public class GlobalMessageController implements IGlobalMessageController {
             Envelope envelope =  new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
             String resultString = JsonHelper.toJson(envelope).orElseThrow();
             broker.send(session, resultString);
-        }
+        });
     }
 
     @Override
