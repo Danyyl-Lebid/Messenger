@@ -6,14 +6,14 @@ public class ChatDto {
 
     private Long id;
 
-    private String name;
+    private String chatName;
 
     public ChatDto() {
     }
 
-    public ChatDto(Long id, String name) {
+    public ChatDto(Long id, String chatName) {
         this.id = id;
-        this.name = name;
+        this.chatName = chatName;
     }
 
     public Long getId() {
@@ -25,11 +25,11 @@ public class ChatDto {
     }
 
     public String getName() {
-        return name;
+        return chatName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String chatName) {
+        this.chatName = chatName;
     }
 
     @Override
@@ -37,19 +37,19 @@ public class ChatDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatDto chatDto = (ChatDto) o;
-        return Objects.equals(id, chatDto.id) && Objects.equals(name, chatDto.name);
+        return Objects.equals(id, chatDto.id) && Objects.equals(chatName, chatDto.chatName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, chatName);
     }
 
     @Override
     public String toString() {
         return "ChatDto{" +
                 "id=" + id +
-                ", name=" + name +
+                ", chatName=" + chatName +
                 '}';
     }
 }
