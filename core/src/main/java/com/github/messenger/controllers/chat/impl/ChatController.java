@@ -2,6 +2,7 @@ package com.github.messenger.controllers.chat.impl;
 
 import com.github.messenger.controllers.chat.IChatController;
 import com.github.messenger.dto.chat.ChatCreateDto;
+import com.github.messenger.dto.chat.ChatDto;
 import com.github.messenger.dto.chat.ChatIdDto;
 import com.github.messenger.dto.user.UserStatusDto;
 import com.github.messenger.entity.Chat;
@@ -79,7 +80,8 @@ public class ChatController implements IChatController {
         for(Long id : chatIds){
             chats.add(chatService.findById(id));
         }
-        Envelope envelope = new Envelope(Topic.PARTICIPANTS, "empty-token", JsonHelper.toJson(chats).orElseThrow());
+        Collection<ChatDto> chatDtos = chats.stream().map(chat -> new ChatDto(chat.getId(), chat.getName())).collect(Collectors.toList());
+        Envelope envelope = new Envelope(Topic.PARTICIPANTS, "empty-token", JsonHelper.toJson(chatDtos).orElseThrow());
         return JsonHelper.toJson(envelope).orElseThrow();
     }
 }
