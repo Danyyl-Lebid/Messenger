@@ -15,6 +15,7 @@ import javax.websocket.Session;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class MessageController implements IMessageController {
 
@@ -33,23 +34,31 @@ public class MessageController implements IMessageController {
     @Override
     public void sendHistory(Session session, Long chatId) {
         Collection<Message> messages = messageService.findAllByChatId(chatId);
-        AtomicBoolean free = new AtomicBoolean(true);
-        synchronized (free) {
-            messages.forEach(message -> {
-                MessageDto dto = new MessageDto(
-                        message.getChatId(),
-                        message.getNickname(),
-                        message.getText(),
-                        new Date(message.getTime())
-                );
-                String payload = JsonHelper.toJson(dto).orElseThrow();
-                Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
-                while (!free.get()) ;
-                free.set(false);
-                broker.sendAsync(session, JsonHelper.toJson(envelope).orElseThrow());
-                free.set(true);
-            });
-        }
+        Collection<String> messageEnvelopes = messages
+                .stream()
+                .map(
+                        message ->
+                                JsonHelper.toJson(
+                                        new Envelope(
+                                                Topic.MESSAGE,
+                                                "empty-token",
+                                                JsonHelper.toJson(
+                                                        new MessageDto(
+                                                                message.getChatId(),
+                                                                message.getNickname(),
+                                                                message.getText(),
+                                                                new Date(message.getTime())
+                                                        )
+                                                ).orElseThrow()
+                                        )
+                                ).orElseThrow()
+                ).collect(Collectors.toList());
+        Envelope envelope = new Envelope(
+                Topic.CHAT_HISTORY,
+                "empty-token",
+                JsonHelper.toJson(messageEnvelopes).orElseThrow()
+        );
+        broker.sendAsync(session, JsonHelper.toJson(envelope).orElseThrow());
     }
 
     @Override
