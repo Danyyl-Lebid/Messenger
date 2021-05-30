@@ -32,17 +32,19 @@ public class GlobalMessageController implements IGlobalMessageController {
     @Override
     public void sendHistory(Session session) {
         Collection<GlobalMessage> messages = globalMessageService.getMessages();
-        messages.stream().forEach(message -> {
-            GlobalMessageDto dto = new GlobalMessageDto(
-                    message.getNickname(),
-                    message.getText(),
-                    new Date(message.getTime())
-            );
-            String payload = JsonHelper.toJson(dto).orElseThrow();
-            Envelope envelope =  new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
-            String resultString = JsonHelper.toJson(envelope).orElseThrow();
-            broker.send(session, resultString);
-        });
+        synchronized (session) {
+            messages.stream().forEach(message -> {
+                GlobalMessageDto dto = new GlobalMessageDto(
+                        message.getNickname(),
+                        message.getText(),
+                        new Date(message.getTime())
+                );
+                String payload = JsonHelper.toJson(dto).orElseThrow();
+                Envelope envelope = new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
+                String resultString = JsonHelper.toJson(envelope).orElseThrow();
+                broker.send(session, resultString);
+            });
+        }
     }
 
     @Override

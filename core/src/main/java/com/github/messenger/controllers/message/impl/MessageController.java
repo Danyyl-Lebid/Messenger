@@ -32,17 +32,19 @@ public class MessageController implements IMessageController {
     @Override
     public void sendHistory(Session session, Long chatId) {
         Collection<Message> messages = messageService.findAllByChatId(chatId);
-        messages.stream().forEach(message -> {
-            MessageDto dto = new MessageDto(
-                    message.getChatId(),
-                    message.getNickname(),
-                    message.getText(),
-                    new Date(message.getTime())
-            );
-            String payload = JsonHelper.toJson(dto).orElseThrow();
-            Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
-            broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
-        });
+        synchronized (session) {
+            messages.stream().forEach(message -> {
+                MessageDto dto = new MessageDto(
+                        message.getChatId(),
+                        message.getNickname(),
+                        message.getText(),
+                        new Date(message.getTime())
+                );
+                String payload = JsonHelper.toJson(dto).orElseThrow();
+                Envelope envelope = new Envelope(Topic.MESSAGE, "empty-token", payload);
+                broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
+            });
+        }
     }
 
     @Override
