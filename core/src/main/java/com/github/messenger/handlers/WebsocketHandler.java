@@ -117,7 +117,6 @@ public class WebsocketHandler {
             }
         } catch (Throwable e) {
             broker.send(session, String.format("Error %s has occurred on server", e.getClass().getName()));
-            log.warn(String.format("Error %s has occurred on server", e.getClass().getName()));
             log.warn(String.format("Exception %s - Message: %s", e.getClass().getName(), e.getMessage()));
         }
     }

@@ -53,7 +53,6 @@ public class MessageController implements IMessageController {
 
     @Override
     public void save(Long userId, String payload) {
-        System.out.println(payload);
         MessageDto dto = JsonHelper.fromJson(payload, MessageDto.class).orElseThrow(IncorrectPayload::new);
         Message message = new Message(
                 null,

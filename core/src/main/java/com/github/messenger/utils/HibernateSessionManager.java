@@ -43,7 +43,6 @@ public class HibernateSessionManager {
             Annotation[] annotations = cls.getAnnotations();
 
             for (Annotation annotation : annotations) {
-                System.out.println(cls.getCanonicalName() + ": " + annotation.toString());
                 if (annotation instanceof javax.persistence.Entity) {
                     classes.add(cls);
                 }
