@@ -13,10 +13,10 @@ public class Message {
     private Long id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Long user_id;
 
     @Column(name = "chat_id")
-    private Long chatId;
+    private Long chat_id;
 
     @Column(name = "nickname")
     private String nickname;
@@ -32,8 +32,8 @@ public class Message {
 
     public Message(Long id, Long userId, Long chatId, String nickname, String text, Long time) {
         this.id = id;
-        this.userId = userId;
-        this.chatId = chatId;
+        this.user_id = userId;
+        this.chat_id = chatId;
         this.nickname = nickname;
         this.text = text;
         this.time = time;
@@ -48,19 +48,19 @@ public class Message {
     }
 
     public Long getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 
     public Long getChatId() {
-        return chatId;
+        return chat_id;
     }
 
     public void setChatId(Long chatId) {
-        this.chatId = chatId;
+        this.chat_id = chatId;
     }
 
     public String getNickname() {
@@ -92,20 +92,20 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return Objects.equals(id, message.id) && Objects.equals(userId, message.userId) && Objects.equals(chatId, message.chatId) && Objects.equals(nickname, message.nickname) && Objects.equals(text, message.text) && Objects.equals(time, message.time);
+        return Objects.equals(id, message.id) && Objects.equals(user_id, message.user_id) && Objects.equals(chat_id, message.chat_id) && Objects.equals(nickname, message.nickname) && Objects.equals(text, message.text) && Objects.equals(time, message.time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, chatId, nickname, text, time);
+        return Objects.hash(id, user_id, chat_id, nickname, text, time);
     }
 
     @Override
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", chatId=" + chatId +
+                ", userId=" + user_id +
+                ", chatId=" + chat_id +
                 ", nickname=" + nickname +
                 ", text='" + text + '\'' +
                 ", time=" + time +
