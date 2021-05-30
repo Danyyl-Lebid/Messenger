@@ -1,9 +1,11 @@
 package com.github.messenger.network;
 
+import com.github.messenger.utils.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.websocket.Session;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -20,7 +22,11 @@ public class Broker {
     }
 
     public void send(Session session, String payload) {
-        session.getAsyncRemote().sendText(payload);
+        try {
+            session.getBasicRemote().sendText(JsonHelper.toJson(payload).orElseThrow(IOException::new));
+        } catch (IOException e) {
+            log.error(String.format("%s - Message: %s", e.getClass().getName(), e.getMessage()));
+        }
     }
 
 }

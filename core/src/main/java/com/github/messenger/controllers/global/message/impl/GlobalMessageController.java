@@ -40,7 +40,8 @@ public class GlobalMessageController implements IGlobalMessageController {
             );
             String payload = JsonHelper.toJson(dto).orElseThrow();
             Envelope envelope =  new Envelope(Topic.GLOBAL_MESSAGE, "empty-token", payload);
-            broker.send(session, JsonHelper.toJson(envelope).orElseThrow());
+            String resultString = JsonHelper.toJson(envelope).orElseThrow();
+            broker.send(session, resultString);
         }
     }
 
