@@ -59,6 +59,7 @@ public class WebsocketHandler {
     @OnMessage
     public void messages(Session session, String payload) {
         try {
+            log.info("Payload - {}", payload);
             Envelope envelope = JsonHelper.fromJson(payload, Envelope.class).orElseThrow();
             PrivateToken result = PrivateTokenProvider.decode(envelope.getToken());
             if (!PrivateTokenProvider.validateToken(result)) {
@@ -75,9 +76,6 @@ public class WebsocketHandler {
                     broker.broadcast(globalConnectionPool.getSessions(), resultString);
                     break;
                 case GLOBAL_MESSAGE:
-                    if (Objects.isNull(this.globalMessageController)) {
-                        System.out.println("Is null in websocket handler");
-                    }
                     this.globalMessageController.save(result.getUserId(), envelope.getPayload());
                     resultString = JsonHelper.toJson(envelope).orElseThrow();
                     this.globalMessageController.broadcast(resultString);
