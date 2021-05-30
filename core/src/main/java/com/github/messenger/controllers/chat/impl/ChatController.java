@@ -81,7 +81,7 @@ public class ChatController implements IChatController {
             chats.add(chatService.findById(id));
         }
         Collection<ChatDto> chatDtos = chats.stream().map(chat -> new ChatDto(chat.getId(), chat.getName())).collect(Collectors.toList());
-        Envelope envelope = new Envelope(Topic.PARTICIPANTS, "empty-token", JsonHelper.toJson(chatDtos).orElseThrow());
+        Envelope envelope = new Envelope(Topic.CHATS, "empty-token", JsonHelper.toJson(chatDtos).orElseThrow());
         return JsonHelper.toJson(envelope).orElseThrow();
     }
 }
