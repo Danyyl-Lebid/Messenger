@@ -46,13 +46,14 @@ public class MessageController implements IMessageController {
     }
 
     @Override
-    public void broadcast(String payload) {
-        MessageDto dto = JsonHelper.fromJson(payload, MessageDto.class).orElseThrow(IncorrectPayload::new);
-        broker.broadcast(roomConnectionPools.getConnectionPool(dto.getChatId()).getSessions(), payload);
+    public void broadcast(Envelope envelope) {
+        MessageDto dto = JsonHelper.fromJson(envelope.getPayload(), MessageDto.class).orElseThrow(IncorrectPayload::new);
+        broker.broadcast(roomConnectionPools.getConnectionPool(dto.getChatId()).getSessions(), JsonHelper.toJson(envelope).orElseThrow());
     }
 
     @Override
     public void save(Long userId, String payload) {
+        System.out.println(payload);
         MessageDto dto = JsonHelper.fromJson(payload, MessageDto.class).orElseThrow(IncorrectPayload::new);
         Message message = new Message(
                 null,

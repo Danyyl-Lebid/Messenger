@@ -25,11 +25,7 @@ public class ControllerConfig {
 
     private static IChatController chatController;
 
-    private static final IMessageController messageController = new MessageController(
-            ServiceConfig.getMessageService(),
-            WebsocketHandlerConfig.getRoomConnectionPools(),
-            WebsocketHandlerConfig.getBroker()
-    );
+    private static IMessageController messageController;
 
     private static IStatusController statusController;
 
@@ -42,11 +38,18 @@ public class ControllerConfig {
     }
 
     public static IMessageController getMessageController() {
+        if (Objects.isNull(messageController)) {
+            messageController = new MessageController(
+                    ServiceConfig.getMessageService(),
+                    WebsocketHandlerConfig.getRoomConnectionPools(),
+                    WebsocketHandlerConfig.getBroker()
+            );
+        }
         return messageController;
     }
 
     public static IGlobalMessageController getGlobalMessageController() {
-        if(Objects.isNull(globalMessageController)){
+        if (Objects.isNull(globalMessageController)) {
             globalMessageController = new GlobalMessageController(
                     ServiceConfig.getGlobalMessageService(),
                     WebsocketHandlerConfig.getWebsocketConnectionPool(),
@@ -57,7 +60,7 @@ public class ControllerConfig {
     }
 
     public static IChatController getChatController() {
-        if(Objects.isNull(chatController)){
+        if (Objects.isNull(chatController)) {
             chatController = new ChatController(
                     ServiceConfig.getUserService(),
                     ServiceConfig.getChatService(),
@@ -68,7 +71,7 @@ public class ControllerConfig {
     }
 
     public static IStatusController getStatusController() {
-        if(Objects.isNull(statusController)){
+        if (Objects.isNull(statusController)) {
             statusController = new StatusController(
                     ServiceConfig.getUserService()
             );

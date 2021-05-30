@@ -82,8 +82,8 @@ public class WebsocketHandler {
                     break;
                 case MESSAGE:
                     messageController.save(result.getUserId(), envelope.getPayload());
-                    resultString = JsonHelper.toJson(envelope).orElseThrow();
-                    messageController.broadcast(resultString);
+                    envelope.setToken("empty-token");
+                    messageController.broadcast(envelope);
                     break;
                 case CHAT_HISTORY:
                     HistoryRequestDto historyRequestDto = JsonHelper.fromJson(envelope.getPayload(), HistoryRequestDto.class).orElseThrow();
