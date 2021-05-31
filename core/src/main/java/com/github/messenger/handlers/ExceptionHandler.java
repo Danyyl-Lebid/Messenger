@@ -24,7 +24,7 @@ public class ExceptionHandler {
         exceptionMap.put(IOException.class, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
 
-    void handle(HttpServletResponse resp, Throwable exception){
+    public void handle(HttpServletResponse resp, Throwable exception){
         resp.setStatus(exceptionMap.get(exception.getClass()));
         if(Objects.nonNull(exception.getMessage())) {
             try (ServletOutputStream out = resp.getOutputStream()) {
