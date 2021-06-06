@@ -1,6 +1,8 @@
 package com.github.messenger.handlers;
 
 import com.github.messenger.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,8 @@ public class ExceptionHandler {
 
     private final Map<Class<? extends Throwable>, Integer> exceptionMap = new HashMap<>();
 
+    private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
+
     public ExceptionHandler() {
         exceptionMap.put(BadRequest.class, HttpServletResponse.SC_BAD_REQUEST);
         exceptionMap.put(ExpiredToken.class, HttpServletResponse.SC_UNAUTHORIZED);
@@ -25,6 +29,7 @@ public class ExceptionHandler {
     }
 
     public void handle(HttpServletResponse resp, Throwable exception){
+        log.info("Exception: {}, Message: {}", exception.getClass().getSimpleName(), exception.getMessage());
         resp.setStatus(exceptionMap.get(exception.getClass()));
         if(Objects.nonNull(exception.getMessage())) {
             try (ServletOutputStream out = resp.getOutputStream()) {

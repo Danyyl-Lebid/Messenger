@@ -11,6 +11,7 @@ import com.github.messenger.utils.JsonHelper;
 import com.github.messenger.utils.PrivateTokenProvider;
 import com.github.messenger.utils.RegexUtils;
 
+import javax.persistence.NoResultException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,18 +26,23 @@ public class AuthorizationController implements IAuthorizationController {
 
     @Override
     public Map<String, String> authorize(String json) {
-        UserAuthDto dto = JsonHelper.fromJson(json, UserAuthDto.class)
-                .orElseThrow(BadRequest::new);
-        User user = findUser(dto);
-        if(!Objects.equals(user.getPassword(), dto.getPassword())){
-            throw new Forbidden();
+        try {
+
+            UserAuthDto dto = JsonHelper.fromJson(json, UserAuthDto.class)
+                    .orElseThrow(BadRequest::new);
+            User user = findUser(dto);
+            if (!Objects.equals(user.getPassword(), dto.getPassword())) {
+                throw new Forbidden("Wrong password");
+            }
+            PrivateToken privateToken = new PrivateToken(user.getId(), user.getLogin(), 30);
+            String encodedToken = PrivateTokenProvider.encode(privateToken);
+            Map<String, String> result = new HashMap<>();
+            result.put("Nickname", user.getNickname());
+            result.put("Token", encodedToken);
+            return result;
+        } catch (NoResultException e){
+            throw new Forbidden("Wrong login");
         }
-        PrivateToken privateToken = new PrivateToken(user.getId(), user.getLogin(), 30);
-        String encodedToken = PrivateTokenProvider.encode(privateToken);
-        Map<String, String> result = new HashMap<>();
-        result.put("Nickname", user.getNickname());
-        result.put("Token", encodedToken);
-        return result;
     }
 
     private User findUser(UserAuthDto dto) {
