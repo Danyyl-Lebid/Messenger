@@ -5,7 +5,7 @@ import com.github.messenger.utils.DateUtils;
 import java.util.Date;
 import java.util.Objects;
 
-public class PrivateToken {
+public class Token {
 
     private Long userId;
 
@@ -15,17 +15,17 @@ public class PrivateToken {
 
     private Date expireIn;
 
-    public PrivateToken() {
+    public Token() {
     }
 
-    public PrivateToken(Long userId, String login, Date createdAt, Date expireIn) {
+    public Token(Long userId, String login, Date createdAt, Date expireIn) {
         this.userId = userId;
         this.login = login;
         this.createdAt = createdAt;
         this.expireIn = expireIn;
     }
 
-    public PrivateToken(Long userId, String login, int lifetimeInMinutes) {
+    public Token(Long userId, String login, int lifetimeInMinutes) {
         this.userId = userId;
         this.login = login;
         this.createdAt = DateUtils.getCurrentDate();
@@ -68,7 +68,7 @@ public class PrivateToken {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PrivateToken that = (PrivateToken) o;
+        Token that = (Token) o;
         return Objects.equals(userId, that.userId) && Objects.equals(login, that.login) && Objects.equals(createdAt, that.createdAt) && Objects.equals(expireIn, that.expireIn);
     }
 
