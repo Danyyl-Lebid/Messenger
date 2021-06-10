@@ -1,4 +1,4 @@
-package com.github.messenger.handlers;
+package com.github.messenger.handlers.http;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

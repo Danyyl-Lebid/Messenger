@@ -1,6 +1,6 @@
 package com.github.messenger.config;
 
-import com.github.messenger.handlers.WebsocketHandler;
+import com.github.messenger.handlers.websocket.WebsocketHandler;
 import com.github.messenger.utils.ServerRunner;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
@@ -28,6 +28,7 @@ public class ServerConfig {
         return new ServerRunner(tomcat, ctx, List.of(chatWebsocketHandler));
     }
 
+    @SuppressWarnings("unchecked")
     private static final Consumer<Context> chatWebsocketHandler = ctx -> {
         ServerContainer serverContainer =
                 (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.class.getName());

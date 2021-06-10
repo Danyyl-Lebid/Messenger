@@ -5,10 +5,10 @@ import com.github.messenger.dto.user.UserAuthDto;
 import com.github.messenger.entity.User;
 import com.github.messenger.exceptions.BadRequest;
 import com.github.messenger.exceptions.Forbidden;
-import com.github.messenger.payload.PrivateToken;
+import com.github.messenger.payload.Token;
 import com.github.messenger.service.user.IUserService;
 import com.github.messenger.utils.JsonHelper;
-import com.github.messenger.utils.PrivateTokenProvider;
+import com.github.messenger.utils.TokenProvider;
 import com.github.messenger.utils.RegexUtils;
 
 import javax.persistence.NoResultException;
@@ -34,8 +34,8 @@ public class AuthorizationController implements IAuthorizationController {
             if (!Objects.equals(user.getPassword(), dto.getPassword())) {
                 throw new Forbidden("Wrong password");
             }
-            PrivateToken privateToken = new PrivateToken(user.getId(), user.getLogin(), 30);
-            String encodedToken = PrivateTokenProvider.encode(privateToken);
+            Token token = new Token(user.getId(), user.getLogin(), 30);
+            String encodedToken = TokenProvider.encode(token);
             Map<String, String> result = new HashMap<>();
             result.put("Nickname", user.getNickname());
             result.put("Token", encodedToken);

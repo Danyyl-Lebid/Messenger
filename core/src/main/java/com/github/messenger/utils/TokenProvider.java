@@ -1,7 +1,7 @@
 package com.github.messenger.utils;
 
 import com.github.messenger.exceptions.BadRequest;
-import com.github.messenger.payload.PrivateToken;
+import com.github.messenger.payload.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +18,9 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 import java.util.Date;
 
-public class PrivateTokenProvider {
+public class TokenProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(PrivateTokenProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String SECRET_KEY = "SpacersChoice";
 
@@ -29,11 +29,11 @@ public class PrivateTokenProvider {
     private static byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-    public static String encode(PrivateToken privateToken) {
-        if (privateToken == null) {
+    public static String encode(Token token) {
+        if (token == null) {
             throw new BadRequest("Empty token!");
         }
-        String str = JsonHelper.toJson(privateToken).orElseThrow(InternalError::new);
+        String str = JsonHelper.toJson(token).orElseThrow(InternalError::new);
         try {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             SecretKeySpec secretKey = getSecretKeySpec();
@@ -49,8 +49,8 @@ public class PrivateTokenProvider {
         return null;
     }
 
-    public static PrivateToken decode(String str) {
-        PrivateToken newT = null;
+    public static Token decode(String str) {
+        Token newT = null;
 
         try {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
@@ -58,7 +58,7 @@ public class PrivateTokenProvider {
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec);
-            newT = JsonHelper.fromJson(new String(cipher.doFinal(Base64.getDecoder().decode(str))), PrivateToken.class).orElseThrow(BadRequest::new);
+            newT = JsonHelper.fromJson(new String(cipher.doFinal(Base64.getDecoder().decode(str))), Token.class).orElseThrow(BadRequest::new);
         } catch (Exception e) {
             log.error("Error while decrypting: " + e);
         }
@@ -73,7 +73,7 @@ public class PrivateTokenProvider {
         return new SecretKeySpec(tmp.getEncoded(), "AES");
     }
 
-    public static boolean validateToken(PrivateToken token) {
+    public static boolean validateToken(Token token) {
         if (token == null) {
             return false;
         }
